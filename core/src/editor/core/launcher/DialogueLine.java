@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class DialogueLine implements ScreenElement {
 
+	private String id;
     private String messageText;
     ShapeRenderer renderer = new ShapeRenderer();
     private float width;
@@ -21,8 +22,6 @@ public class DialogueLine implements ScreenElement {
         this.height = height;
     }
 
-
-
     @Override
     public void render(Batch batch) {
         renderer.begin(ShapeRenderer.ShapeType.Line);
@@ -30,4 +29,5 @@ public class DialogueLine implements ScreenElement {
         renderer.rect(width, height,width, width);
         renderer.end();
     }
+	
 }

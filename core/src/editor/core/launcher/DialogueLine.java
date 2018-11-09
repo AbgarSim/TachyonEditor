@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class DialogueLine implements ScreenElement {
 
+	private String id;
     private String messageText;
     ShapeRenderer renderer = new ShapeRenderer();
     private float width;
@@ -33,4 +34,5 @@ public class DialogueLine implements ScreenElement {
         renderer.rect(posx, posy ,width, height);
         renderer.end();
     }
+	
 }

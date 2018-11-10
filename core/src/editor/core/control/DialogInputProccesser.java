@@ -59,7 +59,7 @@ public class DialogInputProccesser implements InputProcessor {
         Vector2 newTouch = new Vector2(i, i1);
         Vector2 delta = newTouch.cpy().sub(lastTouch);
         lastTouch = newTouch;
-        camera.position.set(delta, 0);
+        camera.position.set(camera.position.x - delta.x, camera.position.y + delta.y, 0);
         camera.update();
         return false;
     }

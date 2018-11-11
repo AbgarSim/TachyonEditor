@@ -11,16 +11,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import editor.core.control.DialogGestures;
 import editor.core.control.DialogInputProccesser;
-import editor.core.shape.Rectangle;
+import editor.core.launcher.DialogueLine;
+import editor.core.launcher.ScreenElement;
 
 public class MainScreen implements Screen {
 
     private Game game;
-    private Batch batch;
-    private Sprite sprite;
+    private SpriteBatch spriteBatch;
+
     private float worldWidth;
     private float worldHeight;
     private OrthographicCamera camera;
@@ -28,17 +34,18 @@ public class MainScreen implements Screen {
     private DialogInputProccesser input;
     private DialogGestures gestures;
 
+    private DialogueLine dialogueLine1;
+    private DialogueLine dialogueLine2;
 
+    public static List<DialogueLine> screenElements = new ArrayList<DialogueLine>();
 
-    public MainScreen(Game game, Batch batch, OrthographicCamera camera) {
-        this.batch = batch;
+    public MainScreen(Game game, SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
+        this.spriteBatch = batch;
         this.camera = camera;
     }
 
     @Override
     public void show() {
-        batch = new SpriteBatch();
-        sprite = new Sprite(new Texture(Gdx.files.internal("badlogic.jpg")));
         worldWidth = Gdx.graphics.getWidth();
         worldHeight = Gdx.graphics.getHeight();
 
@@ -51,21 +58,26 @@ public class MainScreen implements Screen {
         gestures = new DialogGestures(camera);
 
         inputMultiplexer.addProcessor(input);
-        Gdx.input.setInputProcessor(input);
-        // rectangle1 = new Rectangle(290, 100, rectangleWidth, rectangleHeight, Color.BLACK);
-        // rectangle2 = new Rectangle(190, 100, rectangleWidth, rectangleHeight, Color.BLACK);
+        inputMultiplexer.addProcessor(new GestureDetector(gestures));
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
+        dialogueLine1 = new DialogueLine(100, 100, 50, 200);
+        dialogueLine2 = new DialogueLine(100, 100, 250, 200);
+
+        screenElements.add(dialogueLine1);
+        screenElements.add(dialogueLine2);
 
     }
 
     @Override
     public void render(float v) {
 
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        sprite.draw(batch);
-        batch.end();
+        spriteBatch.setProjectionMatrix(camera.combined);
+        dialogueLine1.render(spriteBatch);
+        dialogueLine2.render(spriteBatch);
     }
 
     @Override

@@ -4,13 +4,16 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import editor.core.screens.MainScreen;
 
 public class EditorMainClass extends Game {
 
 	private Game game;
 	private OrthographicCamera camera;
-	private Batch batch;
+	private SpriteBatch batch;
+	private ShapeRenderer renderer;
 
 	public EditorMainClass() {
 		this.game = this;
@@ -24,9 +27,11 @@ public class EditorMainClass extends Game {
 
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
+		renderer = new ShapeRenderer();
+		renderer.setProjectionMatrix(camera.combined);
 
 
-		this.setScreen(new MainScreen(this, batch, camera));
+		this.setScreen(new MainScreen(this, batch, renderer, camera));
 	}
 
 	@Override

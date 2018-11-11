@@ -1,7 +1,7 @@
 package editor.core.launcher;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public interface ScreenElement {
-    void render(Batch batch);
+    void render(SpriteBatch spriteBatch);
 }

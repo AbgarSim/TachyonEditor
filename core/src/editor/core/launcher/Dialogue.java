@@ -1,6 +1,8 @@
 package editor.core.launcher;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,8 @@ public class Dialogue implements ScreenElement{
 
 
     @Override
-    public void render(Batch batch) {
+    public void render(SpriteBatch spriteBatch) {
         for(DialogueLine line : lines)
-            line.render(batch);
+            line.render(spriteBatch);
     }
 }

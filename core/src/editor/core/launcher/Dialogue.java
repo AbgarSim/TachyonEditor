@@ -18,8 +18,8 @@ public class Dialogue implements ScreenElement{
 
 
     @Override
-    public void render(SpriteBatch spriteBatch) {
-        for(DialogueLine line : lines)
-            line.render(spriteBatch);
+    public void render(ShapeRenderer renderer) {
+        //for(DialogueLine line : lines)
+            //line.render(spriteBatch);
     }
 }

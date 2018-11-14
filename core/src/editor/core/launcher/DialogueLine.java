@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -17,58 +18,49 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class DialogueLine implements ScreenElement {
 
-	private String id;
+    private String id;
     private String messageText;
     private float width;
     private float height;
     private float posx;
     private float posy;
-
-    private Texture frame;
-    private Sprite frameSprite;
+    private Rectangle frameRectangle;
 
     public DialogueLine(int width, int height, float posx, float posy) {
         this.width = width;
         this.height = height;
         this.posx = posx;
         this.posy = posy;
-        frame = getRectPixmap(width, height);
-        frameSprite = new Sprite(frame);
-        frameSprite.setPosition(posx, posy);
-        frame.dispose();
+        frameRectangle = new Rectangle();
+        frameRectangle.set(posx, posy, width, height);
     }
 
     @Override
-    public void render(SpriteBatch spriteBatch) {
-        spriteBatch.begin();
-        frameSprite.setPosition(posx, posy);
-        frameSprite.draw(spriteBatch);
-        spriteBatch.end();
+    public void render(ShapeRenderer renderer) {
+        renderer.setAutoShapeType(true);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.BLACK);
+        renderer.rect(frameRectangle.x, frameRectangle.y, frameRectangle.width, frameRectangle.height);
+        renderer.end();
     }
 
-    private Texture getRectPixmap(int width, int height){
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.BLACK);
-        pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
-        pixmap.setColor(Color.WHITE);
-        pixmap.fillRectangle(1, 1, pixmap.getWidth()-1, pixmap.getHeight()-1);
-        Texture rectTexture = new Texture(pixmap);
-        pixmap.dispose();
-        return rectTexture;
 
+    public Vector2 getPosition() {
+        return new Vector2(frameRectangle.x, frameRectangle.y);
     }
 
-    public Vector2 getPosition(){
-        return new Vector2(frameSprite.getX(), frameSprite.getY());
+    public Vector2 getProportions() {
+        return new Vector2(frameRectangle.getWidth(), frameRectangle.getHeight());
     }
 
-    public Vector2 getProportions(){
-        return new Vector2(frameSprite.getWidth(), frameSprite.getHeight());
+    public void setPositions(float x, float y) {
+        frameRectangle.x = x;
+        frameRectangle.y = y;
     }
 
-    public void setPositions(float x, float y){
-        posx = x;
-        posy = y;
+    public void move(Vector2 delta) {
+        Vector2 pos = getPosition();
+        setPositions(pos.x + delta.x, pos.y + delta.y);
     }
 
 }

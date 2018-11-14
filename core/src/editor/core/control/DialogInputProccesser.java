@@ -14,7 +14,7 @@ public class DialogInputProccesser implements InputProcessor {
 
     private OrthographicCamera camera;
 
-    private Vector3 lastTouch = new Vector3();
+    private Vector2 lastTouch = new Vector2();
 
     private boolean isDraggingCollidable = false;
     private DialogueLine currentDrag;
@@ -39,12 +39,14 @@ public class DialogInputProccesser implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
-        lastTouch.set(i, i1, 0);
-        currentDrag = getCollisionIfExist(new Vector3(i, i1, 0));
-        if (currentDrag != null)
+    public boolean touchDown(int x, int y, int dx, int dy) {
+        lastTouch.x = x;
+        lastTouch.y = y;
+        Vector2 coords = unprojectCoordinates(x, y);
+        currentDrag = getCollisionIfExist(coords);
+        if (currentDrag != null) {
             isDraggingCollidable = true;
-        System.out.println("x : " + i + " y: " + i1);
+        }
         return true;
     }
 
@@ -58,19 +60,25 @@ public class DialogInputProccesser implements InputProcessor {
     }
 
     @Override
-    public boolean touchDragged(int i, int i1, int i2) {
-
-        Vector3 newTouch = new Vector3(i, i1, 0);
-        Vector3 delta = newTouch.cpy().sub(lastTouch);
-        lastTouch = newTouch;
+    public boolean touchDragged(int x, int y, int pointer) {
+        Vector2 newTouch = new Vector2(x, y);
         if (isDraggingCollidable) {
-            currentDrag.setPositions(currentDrag.getPosition().x + delta.x, currentDrag.getPosition().y - delta.y);
+            Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
+            Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
+            Vector2 delta = coordsNew.sub(coordsOld);
+            currentDrag.move(delta);
         } else {
-            camera.position.set(camera.position.x - delta.x, camera.position.y + delta.y, 0);
+            Vector2 delta = newTouch.cpy().sub(lastTouch);
+            Vector3 p = camera.position.cpy();
+            camera.position.set((p.x-delta.x*camera.zoom), (p.y+delta.y*camera.zoom), 0);
             camera.update();
         }
+        lastTouch = newTouch;
         return false;
     }
+
+
+
 
     @Override
     public boolean mouseMoved(int i, int i1) {
@@ -89,8 +97,7 @@ public class DialogInputProccesser implements InputProcessor {
     }
 
 
-    public DialogueLine getCollisionIfExist(Vector3 coords) {
-        camera.unproject(coords);
+    public DialogueLine getCollisionIfExist(Vector2 coords) {
         for (DialogueLine line : MainScreen.screenElements) {
             if ((coords.x >= line.getPosition().x &&
                     coords.x <= (line.getPosition().x + line.getProportions().x) &&
@@ -108,5 +115,11 @@ public class DialogInputProccesser implements InputProcessor {
             }
         }
         return null;
+    }
+
+    private Vector2 unprojectCoordinates(float x, float y) {
+        Vector3 raw = new Vector3(x, y, 0);
+        camera.unproject(raw);
+        return new Vector2(raw.x, raw.y);
     }
 }

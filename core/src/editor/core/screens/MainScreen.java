@@ -26,6 +26,8 @@ public class MainScreen implements Screen {
 
     private Game game;
     private SpriteBatch spriteBatch;
+    private ShapeRenderer renderer;
+
 
     private float worldWidth;
     private float worldHeight;
@@ -42,6 +44,7 @@ public class MainScreen implements Screen {
     public MainScreen(Game game, SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
         this.spriteBatch = batch;
         this.camera = camera;
+        this.renderer = renderer;
     }
 
     @Override
@@ -75,9 +78,9 @@ public class MainScreen implements Screen {
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        spriteBatch.setProjectionMatrix(camera.combined);
-        dialogueLine1.render(spriteBatch);
-        dialogueLine2.render(spriteBatch);
+        renderer.setProjectionMatrix(camera.combined);
+        dialogueLine1.render(renderer);
+        dialogueLine2.render(renderer);
     }
 
     @Override

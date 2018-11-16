@@ -65,8 +65,8 @@ public class MainScreen implements Screen {
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        dialogueLine1 = new DialogueLine(100, 100, 50, 200);
-        dialogueLine2 = new DialogueLine(100, 100, 250, 200);
+        dialogueLine1 = new DialogueLine( 50, 200);
+        dialogueLine2 = new DialogueLine(250, 200);
 
         screenElements.add(dialogueLine1);
         screenElements.add(dialogueLine2);
@@ -79,8 +79,9 @@ public class MainScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.setProjectionMatrix(camera.combined);
-        dialogueLine1.render(renderer);
-        dialogueLine2.render(renderer);
+        spriteBatch.setProjectionMatrix(camera.combined);
+        dialogueLine1.render(renderer, spriteBatch);
+        dialogueLine2.render(renderer, spriteBatch);
     }
 
     @Override

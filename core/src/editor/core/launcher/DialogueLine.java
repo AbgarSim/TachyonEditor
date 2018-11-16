@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,28 +21,33 @@ public class DialogueLine implements ScreenElement {
 
     private String id;
     private String messageText;
-    private float width;
-    private float height;
-    private float posx;
-    private float posy;
+    private BitmapFont messageFont;
     private Rectangle frameRectangle;
+    private Rectangle messageFrameRectangle;
 
-    public DialogueLine(int width, int height, float posx, float posy) {
-        this.width = width;
-        this.height = height;
-        this.posx = posx;
-        this.posy = posy;
+
+    public DialogueLine(float posx, float posy) {
         frameRectangle = new Rectangle();
-        frameRectangle.set(posx, posy, width, height);
+        frameRectangle.set(posx, posy, 175, 150);
+        messageFont = new BitmapFont();
+        messageFont.setColor(Color.BLACK);
+        messageFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        messageFrameRectangle = new Rectangle();
+        messageFrameRectangle.set(posx + 5, posy + 5, 165, 30);
+
     }
 
     @Override
-    public void render(ShapeRenderer renderer) {
+    public void render(ShapeRenderer renderer, SpriteBatch batch) {
         renderer.setAutoShapeType(true);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.BLACK);
         renderer.rect(frameRectangle.x, frameRectangle.y, frameRectangle.width, frameRectangle.height);
+        renderer.rect(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - messageFrameRectangle.height - 5, messageFrameRectangle.width, messageFrameRectangle.height);
         renderer.end();
+        batch.begin();
+        messageFont.draw(batch, "This is a random text...", frameRectangle.x  + 8, frameRectangle.y + frameRectangle.height - 8);
+        batch.end();
     }
 
 

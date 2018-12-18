@@ -2,22 +2,17 @@ package editor.core.launcher;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import editor.core.screens.MainScreen;
+import editor.core.screen.MainScreen;
 
 public class EditorMainClass extends Game {
 
-	private Game game;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 
-	public EditorMainClass() {
-		this.game = this;
-	}
 
 	@Override
 	public void create () {
@@ -31,7 +26,7 @@ public class EditorMainClass extends Game {
 		renderer.setProjectionMatrix(camera.combined);
 
 
-		this.setScreen(new MainScreen(this, batch, renderer, camera));
+		this.setScreen(new MainScreen(batch, renderer, camera));
 	}
 
 	@Override

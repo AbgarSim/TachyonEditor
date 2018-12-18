@@ -1,15 +1,11 @@
-package editor.core.screens;
+package editor.core.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
@@ -19,12 +15,10 @@ import java.util.List;
 
 import editor.core.control.DialogGestures;
 import editor.core.control.DialogInputProccesser;
-import editor.core.launcher.DialogueLine;
-import editor.core.launcher.ScreenElement;
+import editor.core.screen.elements.DialogueLine;
 
 public class MainScreen implements Screen {
 
-    private Game game;
     private SpriteBatch spriteBatch;
     private ShapeRenderer renderer;
 
@@ -41,7 +35,7 @@ public class MainScreen implements Screen {
 
     public static List<DialogueLine> screenElements = new ArrayList<DialogueLine>();
 
-    public MainScreen(Game game, SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
+    public MainScreen(SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
         this.spriteBatch = batch;
         this.camera = camera;
         this.renderer = renderer;
@@ -66,7 +60,7 @@ public class MainScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         dialogueLine1 = new DialogueLine( 50, 200);
-        dialogueLine2 = new DialogueLine(250, 200);
+        dialogueLine2 = new DialogueLine(550, 200);
 
         screenElements.add(dialogueLine1);
         screenElements.add(dialogueLine2);
@@ -82,6 +76,7 @@ public class MainScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
         dialogueLine1.render(renderer, spriteBatch);
         dialogueLine2.render(renderer, spriteBatch);
+
     }
 
     @Override

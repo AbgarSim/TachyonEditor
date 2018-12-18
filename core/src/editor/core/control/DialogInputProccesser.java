@@ -1,14 +1,12 @@
 package editor.core.control;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import editor.core.launcher.Dialogue;
-import editor.core.launcher.DialogueLine;
-import editor.core.screens.MainScreen;
+import editor.core.screen.elements.DialogueLine;
+import editor.core.screen.MainScreen;
 
 public class DialogInputProccesser implements InputProcessor {
 

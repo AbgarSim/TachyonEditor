@@ -15,14 +15,21 @@ import java.util.List;
 
 import editor.core.launcher.Event;
 
-
 /*
  * A single dialogue line
  */
 public class DialogueLine {
 
-    private String id;
-    private String messageText;
+    public String id;
+    public String messageText;
+
+    public boolean randomEvent;
+    public boolean remote;
+
+    public List<String> eventList = new ArrayList<>();
+
+    public HashMap<String, DialogueReply> replies = new HashMap<>();
+
     private BitmapFont messageFont;
 
     private Rectangle frameRectangle;
@@ -32,13 +39,9 @@ public class DialogueLine {
     private Rectangle replyTextRectangle;
     private Rectangle replyTextEditRectangle; //temporary
 
-    private List<Event> eventList = new ArrayList<Event>();
-    private HashMap<Rectangle, Event> eventMap = new HashMap<Rectangle, Event>();
-
-    private HashMap<String, DialogueLine> replyList = new HashMap<String, DialogueLine>();
-    private HashMap<Rectangle, DialogueLine> replyMap = new HashMap<Rectangle, DialogueLine>();
-
     public DialogueLine(float posx, float posy) {
+        id = "1";
+        messageText = "Testing 123456789987654321";
         frameRectangle = new Rectangle();
         frameRectangle.set(posx, posy, 195, 150);
 
@@ -48,7 +51,6 @@ public class DialogueLine {
 
         messageFrameRectangle = new Rectangle();
         messageFrameRectangle.set(posx + 5, posy - 5, 185, 30);
-        messageText = "Testing 123456789987654321";
 
         eventRectangle = new Rectangle();
         eventRectangle.set(posx + 5, posy - 35, 145, 30);
@@ -66,14 +68,10 @@ public class DialogueLine {
         replyTextEditRectangle.set(posx + 150, posy - 65, 40, 30);
     }
 
-
     public void move(Vector2 delta) {
         Vector2 pos = getPosition();
         setPositions(pos.x + delta.x, pos.y + delta.y);
     }
-
-
-
 
     //Get rectangle position
     public Vector2 getPosition() {
@@ -91,7 +89,7 @@ public class DialogueLine {
         return new Vector2(frameRectangle.getWidth(), frameRectangle.getHeight());
     }
 
-    private void drawDialogLineRectangleElement(Rectangle rectangle, ShapeRenderer renderer){
+    private void drawDialogLineRectangleElement(Rectangle rectangle, ShapeRenderer renderer) {
         renderer.rect(rectangle.x, rectangle.y + frameRectangle.height - rectangle.height, rectangle.width, rectangle.height);
     }
 
@@ -116,4 +114,20 @@ public class DialogueLine {
         messageFont.draw(batch, messageToDraw, frameRectangle.x + 8, frameRectangle.y + frameRectangle.height - 8);
         batch.end();
     }
+
+    public void addReply(DialogueReply reply) {
+        if (replies.containsKey(reply.id)) {
+            System.out.println("Error! More than 1 reply with id " + reply.id + " in dialogue message id " + id + " with text " + messageText);
+        }
+        replies.put(reply.id, reply);
+    }
+
+    public DialogueReply getReply(String replyId) {
+        return replies.get(replyId);
+    }
+
+    public void addEvent(String eventId, boolean affectsNPC) {
+        eventList.add((affectsNPC ? "1" : "0") + eventId);
+    }
+
 }

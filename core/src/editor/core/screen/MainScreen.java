@@ -1,6 +1,5 @@
 package editor.core.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -13,8 +12,9 @@ import com.badlogic.gdx.input.GestureDetector;
 import java.util.ArrayList;
 import java.util.List;
 
+import editor.core.control.DialogEditorInputProcessor;
 import editor.core.control.DialogGestures;
-import editor.core.control.DialogInputProccesser;
+import editor.core.control.DialogInputProcessor;
 import editor.core.screen.elements.DialogueLine;
 
 public class MainScreen implements Screen {
@@ -27,13 +27,10 @@ public class MainScreen implements Screen {
     private float worldHeight;
     private OrthographicCamera camera;
     private InputMultiplexer inputMultiplexer;
-    private DialogInputProccesser input;
+    private DialogInputProcessor input;
     private DialogGestures gestures;
 
-    private DialogueLine dialogueLine1;
-    private DialogueLine dialogueLine2;
-
-    public static List<DialogueLine> screenElements = new ArrayList<DialogueLine>();
+    public static List<DialogueLine> screenElements = new ArrayList<>();
 
     public MainScreen(SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
         this.spriteBatch = batch;
@@ -51,7 +48,7 @@ public class MainScreen implements Screen {
         camera.position.set(worldWidth / 2, worldHeight / 2, 0);
         camera.update();
         inputMultiplexer = new InputMultiplexer();
-        input = new DialogInputProccesser(camera);
+        input = new DialogEditorInputProcessor(camera, this);
         gestures = new DialogGestures(camera);
 
         inputMultiplexer.addProcessor(input);
@@ -59,11 +56,8 @@ public class MainScreen implements Screen {
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        dialogueLine1 = new DialogueLine( 50, 200);
-        dialogueLine2 = new DialogueLine(550, 200);
-
-        screenElements.add(dialogueLine1);
-        screenElements.add(dialogueLine2);
+        screenElements.add(new DialogueLine( 50, 200));
+        screenElements.add(new DialogueLine(550, 200));
 
     }
 
@@ -74,9 +68,9 @@ public class MainScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.setProjectionMatrix(camera.combined);
         spriteBatch.setProjectionMatrix(camera.combined);
-        dialogueLine1.render(renderer, spriteBatch);
-        dialogueLine2.render(renderer, spriteBatch);
-
+        for (DialogueLine dLine: screenElements) {
+            dLine.render(renderer, spriteBatch);
+        }
     }
 
     @Override

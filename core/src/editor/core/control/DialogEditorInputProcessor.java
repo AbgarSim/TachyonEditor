@@ -1,24 +1,23 @@
 package editor.core.control;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import editor.core.screen.elements.DialogueLine;
 import editor.core.screen.MainScreen;
+import editor.core.screen.elements.DialogueLine;
 
-public class DialogInputProccesser implements InputProcessor {
-
-    private OrthographicCamera camera;
+public class DialogEditorInputProcessor extends DialogInputProcessor {
 
     private Vector2 lastTouch = new Vector2();
+    protected MainScreen parentScreen;
 
     private boolean isDraggingCollidable = false;
     private DialogueLine currentDrag;
 
-    public DialogInputProccesser(OrthographicCamera camera) {
-        this.camera = camera;
+    public DialogEditorInputProcessor(OrthographicCamera camera, MainScreen parentScreen) {
+        super(camera);
+        this.parentScreen = parentScreen;
     }
 
     @Override
@@ -96,7 +95,7 @@ public class DialogInputProccesser implements InputProcessor {
 
 
     public DialogueLine getCollisionIfExist(Vector2 coords) {
-        for (DialogueLine line : MainScreen.screenElements) {
+        for (DialogueLine line : parentScreen.screenElements) {
             if ((coords.x >= line.getPosition().x &&
                     coords.x <= (line.getPosition().x + line.getProportions().x) &&
                     coords.y >= line.getPosition().y &&
@@ -113,11 +112,5 @@ public class DialogInputProccesser implements InputProcessor {
             }
         }
         return null;
-    }
-
-    private Vector2 unprojectCoordinates(float x, float y) {
-        Vector3 raw = new Vector3(x, y, 0);
-        camera.unproject(raw);
-        return new Vector2(raw.x, raw.y);
     }
 }

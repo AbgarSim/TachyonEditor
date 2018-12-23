@@ -11,14 +11,15 @@ import editor.core.screen.MainScreen;
 public class DialogInputProccesser implements InputProcessor {
 
     private OrthographicCamera camera;
-
+    private MainScreen parent;
     private Vector2 lastTouch = new Vector2();
-
     private boolean isDraggingCollidable = false;
     private DialogueLine currentDrag;
 
-    public DialogInputProccesser(OrthographicCamera camera) {
+
+    public DialogInputProccesser(OrthographicCamera camera, MainScreen parent) {
         this.camera = camera;
+        this.parent = parent;
     }
 
     @Override
@@ -68,14 +69,12 @@ public class DialogInputProccesser implements InputProcessor {
         } else {
             Vector2 delta = newTouch.cpy().sub(lastTouch);
             Vector3 p = camera.position.cpy();
-            camera.position.set((p.x-delta.x*camera.zoom), (p.y+delta.y*camera.zoom), 0);
+            camera.position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
             camera.update();
         }
         lastTouch = newTouch;
         return false;
     }
-
-
 
 
     @Override
@@ -96,7 +95,7 @@ public class DialogInputProccesser implements InputProcessor {
 
 
     public DialogueLine getCollisionIfExist(Vector2 coords) {
-        for (DialogueLine line : MainScreen.screenElements) {
+        for (DialogueLine line : parent.screenElements) {
             if ((coords.x >= line.getPosition().x &&
                     coords.x <= (line.getPosition().x + line.getProportions().x) &&
                     coords.y >= line.getPosition().y &&

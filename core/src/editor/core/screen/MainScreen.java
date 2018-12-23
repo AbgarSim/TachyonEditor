@@ -33,7 +33,7 @@ public class MainScreen implements Screen {
     private DialogueLine dialogueLine1;
     private DialogueLine dialogueLine2;
 
-    public static List<DialogueLine> screenElements = new ArrayList<DialogueLine>();
+    public List<DialogueLine> screenElements = new ArrayList<DialogueLine>();
 
     public MainScreen(SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
         this.spriteBatch = batch;
@@ -51,7 +51,7 @@ public class MainScreen implements Screen {
         camera.position.set(worldWidth / 2, worldHeight / 2, 0);
         camera.update();
         inputMultiplexer = new InputMultiplexer();
-        input = new DialogInputProccesser(camera);
+        input = new DialogInputProccesser(camera, this);
         gestures = new DialogGestures(camera);
 
         inputMultiplexer.addProcessor(input);

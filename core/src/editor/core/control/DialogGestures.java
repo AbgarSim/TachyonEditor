@@ -53,7 +53,7 @@ public class DialogGestures implements GestureDetector.GestureListener {
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         //camera.translate(-deltaX, deltaY);
-        //camera.update();
+        //camera.setPosition();
         return false;
     }
 

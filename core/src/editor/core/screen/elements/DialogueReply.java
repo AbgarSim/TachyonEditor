@@ -39,7 +39,7 @@ public class DialogueReply {
 
     }
 
-    public Vector2 getReplyProportions() {
+    public Vector2 getProportions() {
         return new Vector2(messageRectangle.width + messageButtonRectangle.width, messageRectangle.height);
     }
 
@@ -47,16 +47,22 @@ public class DialogueReply {
         conditions.add(cond);
     }
 
-    public void setPosition(Vector2 position) {
-        this.messageRectangle.x = position.x;
-        this.messageRectangle.y = position.y;
+    public void setPosition(Vector2 delta) {
+        this.messageRectangle.x = delta.x;
+        this.messageRectangle.y = delta.y;
         this.messageButtonRectangle.x = messageRectangle.x + messageRectangle.width;
-        this.messageButtonRectangle.y = position.y;
+        this.messageButtonRectangle.y = delta.y;
+    }
+
+    public Vector2 getPosition(){
+        return new Vector2(messageRectangle.x, messageRectangle.y);
     }
 
     public void render(ShapeRenderer renderer) {
         renderer.rect(messageRectangle.x, messageRectangle.y,
                 messageRectangle.width, messageRectangle.height);
+        renderer.rect(messageButtonRectangle.x, messageButtonRectangle.y,
+                messageButtonRectangle.width, messageButtonRectangle.height);
     }
 
 }

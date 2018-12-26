@@ -1,25 +1,27 @@
 package editor.core.control;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
-public class DialogGestures implements GestureDetector.GestureListener {
+import editor.core.screen.MainScreen;
 
+//Nested class
+public class DialogueGestureListener implements GestureDetector.GestureListener{
 
     private float initialScale = 1;
     private OrthographicCamera camera;
+    private MainScreen screen;
 
-    public DialogGestures(OrthographicCamera camera) {
+    public DialogueGestureListener(OrthographicCamera camera, MainScreen screen) {
         this.camera = camera;
+        this.screen = screen;
     }
 
     /*
-         A user touches the screen.
-         */
+           A user touches the screen.
+           */
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
         return false;
@@ -41,7 +43,8 @@ public class DialogGestures implements GestureDetector.GestureListener {
     * */
     @Override
     public boolean longPress(float x, float y) {
-
+        Vector2 coords = unprojectCoordinates(x, y);
+        screen.addDialogueLine(coords);
         return false;
     }
 
@@ -82,4 +85,9 @@ public class DialogGestures implements GestureDetector.GestureListener {
     public void pinchStop() {
     }
 
+    private Vector2 unprojectCoordinates(float x, float y) {
+        Vector3 raw = new Vector3(x, y, 0);
+        camera.unproject(raw);
+        return new Vector2(raw.x, raw.y);
+    }
 }

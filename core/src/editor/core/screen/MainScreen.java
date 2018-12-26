@@ -1,6 +1,5 @@
 package editor.core.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -9,13 +8,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import editor.core.control.DialogGestures;
+import editor.core.control.DialogGesturesDetector;
 import editor.core.control.DialogInputProccesser;
 import editor.core.screen.elements.DialogueLine;
+import editor.core.screen.elements.DialogueLineFactory;
 
 public class MainScreen implements Screen {
 
@@ -28,17 +29,19 @@ public class MainScreen implements Screen {
     private OrthographicCamera camera;
     private InputMultiplexer inputMultiplexer;
     private DialogInputProccesser input;
-    private DialogGestures gestures;
+    private DialogGesturesDetector gestures;
 
-    private DialogueLine dialogueLine1;
-    private DialogueLine dialogueLine2;
-
+    private DialogueLineFactory dialogueLineFactory;
     public List<DialogueLine> screenElements = new ArrayList<DialogueLine>();
 
     public MainScreen(SpriteBatch batch, ShapeRenderer renderer, OrthographicCamera camera) {
         this.spriteBatch = batch;
         this.camera = camera;
         this.renderer = renderer;
+    }
+
+    public void addDialogueLine(Vector2 pos){
+        screenElements.add(dialogueLineFactory.getDialogueLine(pos));
     }
 
     @Override
@@ -52,18 +55,19 @@ public class MainScreen implements Screen {
         camera.update();
         inputMultiplexer = new InputMultiplexer();
         input = new DialogInputProccesser(camera, this);
-        gestures = new DialogGestures(camera);
+        gestures = new DialogGesturesDetector(camera, this);
 
+
+        inputMultiplexer.addProcessor(gestures);
         inputMultiplexer.addProcessor(input);
-        inputMultiplexer.addProcessor(new GestureDetector(gestures));
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        dialogueLine1 = new DialogueLine( 50, 200);
-        dialogueLine2 = new DialogueLine(550, 200);
+        dialogueLineFactory = new DialogueLineFactory();
 
-        screenElements.add(dialogueLine1);
-        screenElements.add(dialogueLine2);
+
+        screenElements.add(dialogueLineFactory.getDialogueLine("I dunno", new Vector2(50, 200)));
+        screenElements.add(dialogueLineFactory.getDialogueLine("I dunno x2", new Vector2(550, 200)));
 
     }
 
@@ -74,8 +78,9 @@ public class MainScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.setProjectionMatrix(camera.combined);
         spriteBatch.setProjectionMatrix(camera.combined);
-        dialogueLine1.render(renderer, spriteBatch);
-        dialogueLine2.render(renderer, spriteBatch);
+        for(DialogueLine line : screenElements){
+            line.render(renderer, spriteBatch);
+        }
 
     }
 

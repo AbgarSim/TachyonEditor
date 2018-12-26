@@ -11,15 +11,16 @@ import editor.core.screen.MainScreen;
 public class DialogInputProccesser implements InputProcessor {
 
     private OrthographicCamera camera;
-    private MainScreen parent;
+    private MainScreen screen;
     private Vector2 lastTouch = new Vector2();
     private boolean isDraggingCollidable = false;
     private DialogueLine currentDrag;
 
 
-    public DialogInputProccesser(OrthographicCamera camera, MainScreen parent) {
+    public DialogInputProccesser(OrthographicCamera camera, MainScreen screen) {
         this.camera = camera;
-        this.parent = parent;
+        this.screen = screen;
+
     }
 
     @Override
@@ -95,7 +96,7 @@ public class DialogInputProccesser implements InputProcessor {
 
 
     public DialogueLine getCollisionIfExist(Vector2 coords) {
-        for (DialogueLine line : parent.screenElements) {
+        for (DialogueLine line : screen.screenElements) {
             if ((coords.x >= line.getPosition().x &&
                     coords.x <= (line.getPosition().x + line.getProportions().x) &&
                     coords.y >= line.getPosition().y &&

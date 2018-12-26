@@ -31,6 +31,10 @@ public class DialogueLine {
     private Rectangle frameRectangle;
     private Rectangle messageFrameRectangle;
 
+    public DialogueLine(Vector2 pos) {
+        this(pos.x, pos.y);
+    }
+
     public DialogueLine(float posx, float posy) {
         id = "1";
         messageText = "Testing 123456789987654321";
@@ -53,15 +57,23 @@ public class DialogueLine {
         //events.put("e3", new DialogueEvent(this));
 
         int elementY = (int) (messageFrameRectangle.y);
-        for (DialogueEvent event : events.values()){
+        for (DialogueEvent event : events.values()) {
             event.setPosition(new Vector2(frameRectangle.x + 5, elementY));
             elementY += event.getProportions().y;
         }
-        elementY+=10;
+        elementY += 10;
         for (DialogueReply reply : replies.values()) {
             reply.setPosition(new Vector2(frameRectangle.x + 5, elementY));
             elementY += reply.getProportions().y;
         }
+    }
+
+    public String getMessageText() {
+        return messageText;
+    }
+
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
     public void addReply(DialogueReply reply) {
@@ -86,17 +98,21 @@ public class DialogueLine {
     }
 
     //Set rectangles position
-    public void setPositions(float x, float y) {
+    public void moveFrameAndMessageRectangles(float x, float y) {
         frameRectangle.x = x;
         frameRectangle.y = y;
         messageFrameRectangle.x = x + 5;
         messageFrameRectangle.y = y + frameRectangle.height - messageFrameRectangle.height - 5;
+    }
 
+    //Get rectangle width , height proportions
+    public Vector2 getProportions() {
+        return new Vector2(frameRectangle.getWidth(), frameRectangle.getHeight());
     }
 
     private void calculateElementsPositioning() {
         int elementY = (int) (frameRectangle.y) + 15;
-        for (DialogueEvent event : events.values()){
+        for (DialogueEvent event : events.values()) {
             event.setPosition(new Vector2(frameRectangle.x + 5, elementY));
             elementY += event.getProportions().y;
         }
@@ -109,9 +125,9 @@ public class DialogueLine {
 
     private int calculateFrameHeight() {
         int frameHeight = 50;
-        if(!events.values().isEmpty()){
+        if (!events.values().isEmpty()) {
             frameHeight += 10;
-            for(DialogueEvent event : events.values()){
+            for (DialogueEvent event : events.values()) {
                 frameHeight += event.getProportions().y;
             }
         }
@@ -127,14 +143,8 @@ public class DialogueLine {
 
     public void move(Vector2 delta) {
         Vector2 pos = getPosition();
-        setPositions(pos.x + delta.x, pos.y + delta.y);
+        moveFrameAndMessageRectangles(pos.x + delta.x, pos.y + delta.y);
         calculateElementsPositioning();
-    }
-
-
-    //Get rectangle width , height proportions
-    public Vector2 getProportions() {
-        return new Vector2(frameRectangle.getWidth(), frameRectangle.getHeight());
     }
 
 
@@ -157,7 +167,7 @@ public class DialogueLine {
         for (DialogueReply reply : replies.values()) {
             reply.render(renderer);
         }
-        for(DialogueEvent event : events.values()){
+        for (DialogueEvent event : events.values()) {
             event.render(renderer);
         }
         renderer.end();

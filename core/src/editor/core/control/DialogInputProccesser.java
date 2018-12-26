@@ -66,7 +66,9 @@ public class DialogInputProccesser implements InputProcessor {
             Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
             Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
             Vector2 delta = coordsNew.sub(coordsOld);
-            currentDrag.move(delta);
+            // Strange null pointer/deadlock bug :/
+            if(delta != null)
+                currentDrag.move(delta);
         } else {
             Vector2 delta = newTouch.cpy().sub(lastTouch);
             Vector3 p = camera.position.cpy();

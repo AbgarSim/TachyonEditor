@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.HashMap;
+
 import editor.core.screen.elements.DialogueLine;
 import editor.core.screen.MainScreen;
 
@@ -14,7 +16,7 @@ public class DialogInputProccesser implements InputProcessor {
     private MainScreen screen;
     private Vector2 lastTouch = new Vector2();
     private boolean isDraggingCollidable = false;
-    private DialogueLine currentDrag;
+    private HashMap<Integer, DialogueLine> currentDrags = new HashMap<>();
 
 
     public DialogInputProccesser(OrthographicCamera camera, MainScreen screen) {
@@ -39,21 +41,24 @@ public class DialogInputProccesser implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int x, int y, int dx, int dy) {
+    public boolean touchDown(int x, int y, int pointer, int dy) {
         lastTouch.x = x;
         lastTouch.y = y;
         Vector2 coords = unprojectCoordinates(x, y);
-        currentDrag = getCollisionIfExist(coords);
+        DialogueLine currentDrag = getCollisionIfExist(coords);
         if (currentDrag != null) {
             isDraggingCollidable = true;
+            currentDrags.put(pointer, currentDrag);
         }
         return true;
     }
 
     @Override
-    public boolean touchUp(int i, int i1, int i2, int i3) {
+    public boolean touchUp(int i, int i1, int pointer, int i3) {
         if (isDraggingCollidable) {
-            currentDrag = null;
+            DialogueLine currentDrag = currentDrags.get(pointer);
+            if (currentDrag != null)
+                currentDrags.remove(pointer);
             isDraggingCollidable = false;
         }
         return false;
@@ -67,7 +72,8 @@ public class DialogInputProccesser implements InputProcessor {
             Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
             Vector2 delta = coordsNew.sub(coordsOld);
             // Strange null pointer/deadlock bug :/
-            if(delta != null)
+            DialogueLine currentDrag = currentDrags.get(pointer);
+            if (currentDrag != null)
                 currentDrag.move(delta);
         } else {
             Vector2 delta = newTouch.cpy().sub(lastTouch);

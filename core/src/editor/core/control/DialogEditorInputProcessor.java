@@ -1,23 +1,28 @@
 package editor.core.control;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import editor.core.screen.MainScreen;
+import java.util.HashMap;
+
 import editor.core.screen.elements.DialogueLine;
+import editor.core.screen.MainScreen;
 
-public class DialogEditorInputProcessor extends DialogInputProcessor {
+public class DialogInputProccesser implements InputProcessor {
 
+    private OrthographicCamera camera;
+    private MainScreen screen;
     private Vector2 lastTouch = new Vector2();
-    protected MainScreen parentScreen;
-
     private boolean isDraggingCollidable = false;
-    private DialogueLine currentDrag;
+    private HashMap<Integer, DialogueLine> currentDrags = new HashMap<>();
 
-    public DialogEditorInputProcessor(OrthographicCamera camera, MainScreen parentScreen) {
-        super(camera);
-        this.parentScreen = parentScreen;
+
+    public DialogInputProccesser(OrthographicCamera camera, MainScreen screen) {
+        this.camera = camera;
+        this.screen = screen;
+
     }
 
     @Override
@@ -36,21 +41,24 @@ public class DialogEditorInputProcessor extends DialogInputProcessor {
     }
 
     @Override
-    public boolean touchDown(int x, int y, int dx, int dy) {
+    public boolean touchDown(int x, int y, int pointer, int dy) {
         lastTouch.x = x;
         lastTouch.y = y;
         Vector2 coords = unprojectCoordinates(x, y);
-        currentDrag = getCollisionIfExist(coords);
+        DialogueLine currentDrag = getCollisionIfExist(coords);
         if (currentDrag != null) {
             isDraggingCollidable = true;
+            currentDrags.put(pointer, currentDrag);
         }
         return true;
     }
 
     @Override
-    public boolean touchUp(int i, int i1, int i2, int i3) {
+    public boolean touchUp(int i, int i1, int pointer, int i3) {
         if (isDraggingCollidable) {
-            currentDrag = null;
+            DialogueLine currentDrag = currentDrags.get(pointer);
+            if (currentDrag != null)
+                currentDrags.remove(pointer);
             isDraggingCollidable = false;
         }
         return false;
@@ -63,18 +71,19 @@ public class DialogEditorInputProcessor extends DialogInputProcessor {
             Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
             Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
             Vector2 delta = coordsNew.sub(coordsOld);
-            currentDrag.move(delta);
+            // Strange null pointer/deadlock bug :/
+            DialogueLine currentDrag = currentDrags.get(pointer);
+            if (currentDrag != null)
+                currentDrag.move(delta);
         } else {
             Vector2 delta = newTouch.cpy().sub(lastTouch);
             Vector3 p = camera.position.cpy();
-            camera.position.set((p.x-delta.x*camera.zoom), (p.y+delta.y*camera.zoom), 0);
+            camera.position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
             camera.update();
         }
         lastTouch = newTouch;
         return false;
     }
-
-
 
 
     @Override
@@ -95,7 +104,7 @@ public class DialogEditorInputProcessor extends DialogInputProcessor {
 
 
     public DialogueLine getCollisionIfExist(Vector2 coords) {
-        for (DialogueLine line : parentScreen.screenElements) {
+        for (DialogueLine line : screen.screenElements) {
             if ((coords.x >= line.getPosition().x &&
                     coords.x <= (line.getPosition().x + line.getProportions().x) &&
                     coords.y >= line.getPosition().y &&
@@ -112,5 +121,11 @@ public class DialogEditorInputProcessor extends DialogInputProcessor {
             }
         }
         return null;
+    }
+
+    private Vector2 unprojectCoordinates(float x, float y) {
+        Vector3 raw = new Vector3(x, y, 0);
+        camera.unproject(raw);
+        return new Vector2(raw.x, raw.y);
     }
 }

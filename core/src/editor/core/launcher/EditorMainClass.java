@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import editor.core.screen.MainScreen;
+import editor.core.screen.elements.condition.ConditionsService;
 
 public class EditorMainClass extends Game {
 
@@ -25,8 +26,8 @@ public class EditorMainClass extends Game {
 		renderer = new ShapeRenderer();
 		renderer.setProjectionMatrix(camera.combined);
 
-
 		this.setScreen(new MainScreen(batch, renderer, camera));
+		ConditionsService.loadConditions();
 	}
 
 	@Override

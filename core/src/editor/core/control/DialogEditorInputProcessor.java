@@ -10,7 +10,7 @@ import java.util.HashMap;
 import editor.core.screen.elements.DialogueLine;
 import editor.core.screen.MainScreen;
 
-public class DialogInputProccesser implements InputProcessor {
+public class DialogEditorInputProcessor implements InputProcessor {
 
     private OrthographicCamera camera;
     private MainScreen screen;
@@ -19,7 +19,7 @@ public class DialogInputProccesser implements InputProcessor {
     private HashMap<Integer, DialogueLine> currentDrags = new HashMap<>();
 
 
-    public DialogInputProccesser(OrthographicCamera camera, MainScreen screen) {
+    public DialogEditorInputProcessor(OrthographicCamera camera, MainScreen screen) {
         this.camera = camera;
         this.screen = screen;
 

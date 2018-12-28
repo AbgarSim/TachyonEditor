@@ -1,4 +1,4 @@
-package editor.core.screen.elements.condition;
+package editor.core.enums;
 
 public enum ShipSystemSuperType {
 	OTHER(0),

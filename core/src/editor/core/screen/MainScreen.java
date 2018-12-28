@@ -7,14 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import editor.core.control.DialogGesturesDetector;
-import editor.core.control.DialogInputProccesser;
+import editor.core.control.DialogEditorInputProcessor;
 import editor.core.screen.elements.DialogueLine;
 import editor.core.screen.elements.DialogueLineFactory;
 
@@ -28,7 +27,7 @@ public class MainScreen implements Screen {
     private float worldHeight;
     private OrthographicCamera camera;
     private InputMultiplexer inputMultiplexer;
-    private DialogInputProccesser input;
+    private DialogEditorInputProcessor input;
     private DialogGesturesDetector gestures;
 
     private DialogueLineFactory dialogueLineFactory;
@@ -54,7 +53,7 @@ public class MainScreen implements Screen {
         camera.position.set(worldWidth / 2, worldHeight / 2, 0);
         camera.update();
         inputMultiplexer = new InputMultiplexer();
-        input = new DialogInputProccesser(camera, this);
+        input = new DialogEditorInputProcessor(camera, this);
         gestures = new DialogGesturesDetector(camera, this);
 
 

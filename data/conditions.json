@@ -1,0 +1,401 @@
+[
+    {
+        "type": "PARENT_CONDITION",
+        "isAbstract": "true",
+        "parameters": {
+            "targetPlayer": "boolean"
+        }
+    },
+    {
+        "type": "MOB_AI_ABSENT",
+        "extendsCondition": "MOB_AI_PRESENT",
+    },
+    {
+        "type": "MOB_AI_PRESENT",
+        "extendsCondition": "MOB_CONDITION",
+        "parameters": {
+            "aiTypes": "List<MobAI>",
+            "allReq": "boolean"
+        }
+    },
+    {
+        "type": "MOB_CONDITION",
+        "isAbstract": "true",
+        "extendsCondition": "PARENT_CONDITION",
+    },
+    {
+        "type": "MOB_HEALTH_ABSENT",
+        "extendsCondition": "MOB_HEALTH_PRESENT",
+    },
+    {
+        "type": "MOB_HEALTH_PRESENT",
+        "extendsCondition": "MOB_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "MOB_NAME_ABSENT",
+        "extendsCondition": "MOB_NAME_PRESENT",
+    },
+    {
+        "type": "MOB_NAME_PRESENT",
+        "extendsCondition": "MOB_CONDITION",
+        "parameters": {
+            "name": "String"
+        }
+    },
+    {
+        "type": "MOB_OXYGEN_ABSENT",
+        "extendsCondition": "MOB_OXYGEN_PRESENT",
+    },
+    {
+        "type": "MOB_OXYGEN_PRESENT",
+        "extendsCondition": "MOB_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "MOB_RACE_ABSENT",
+        "extendsCondition": "MOB_RACE_PRESENT",
+    },
+    {
+        "type": "MOB_RACE_PRESENT",
+        "extendsCondition": "MOB_CONDITION",
+        "parameters": {
+            "race": "Race"
+        }
+    },
+    {
+        "type": "MOB_SCRAP_ABSENT",
+        "extendsCondition": "MOB_SCRAP_PRESENT",
+    },
+    {
+        "type": "MOB_SCRAP_PRESENT",
+        "extendsCondition": "MOB_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SECTOR_AREA_ABSENT",
+        "extendsCondition": "SECTOR_AREA_PRESENT",
+    },
+    {
+        "type": "SECTOR_AREA_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "areaStart": "String",
+            "areaEnd": "String"
+        }
+    },
+    {
+        "type": "SECTOR_CONDITION",
+        "isAbstract": "true",
+        "extendsCondition": "PARENT_CONDITION",
+    },
+    {
+        "type": "SECTOR_COORDS_ABSENT",
+        "extendsCondition": "SECTOR_COORDS_PRESENT",
+    },
+    {
+        "type": "SECTOR_COORDS_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "coords": "List<String>"
+        }
+    },
+    {
+        "type": "SECTOR_DEBRIS_ABSENT",
+        "extendsCondition": "SECTOR_DEBRIS_PRESENT",
+    },
+    {
+        "type": "SECTOR_DEBRIS_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SECTOR_NPCS_ABSENT",
+        "extendsCondition": "SECTOR_NPCS_PRESENT",
+    },
+    {
+        "type": "SECTOR_NPCS_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "qty": "int",
+            "name": "String"
+        }
+    },
+    {
+        "type": "SECTOR_PLAYERS_ABSENT",
+        "extendsCondition": "SECTOR_PLAYERS_PRESENT",
+    },
+    {
+        "type": "SECTOR_PLAYERS_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "qty": "int",
+            "name": "String"
+        }
+    },
+    {
+        "type": "SECTOR_SHIPS_ABSENT",
+        "extendsCondition": "SECTOR_SHIPS_PRESENT",
+    },
+    {
+        "type": "SECTOR_SHIPS_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "qty": "int",
+            "location": "String",
+            "shipName": "String",
+            "owner": "String",
+            "crew": "String",
+            "race": "Race",
+            "shipClass": "ShipClass",
+            "posAreaStart": "String",
+            "posAreaEnd": "String",
+            "ignoreClass": "ShipClass"
+        }
+    },
+    {
+        "type": "SECTOR_THREAT_ABSENT",
+        "extendsCondition": "SECTOR_THREAT_PRESENT",
+    },
+    {
+        "type": "SECTOR_THREAT_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "threatStart": "String",
+            "threatEnd": "String"
+        }
+    },
+    {
+        "type": "SECTOR_TYPE_ABSENT",
+        "extendsCondition": "SECTOR_TYPE_PRESENT",
+    },
+    {
+        "type": "SECTOR_TYPE_PRESENT",
+        "extendsCondition": "SECTOR_CONDITION",
+        "parameters": {
+            "types": "List<Int>"
+        }
+    },
+    {
+        "type": "SERVER_VARIABLE_CONDITION",
+        "isAbstract": "true",
+        "extendsCondition": "PARENT_CONDITION",
+    },
+    {
+        "type": "SERVER_VARIABLE_ABSENT",
+        "extendsCondition": "SERVER_VARIABLE_PRESENT",
+    },
+    {
+        "type": "SERVER_VARIABLE_BIGGER",
+        "extendsCondition": "SERVER_VARIABLE_CONDITION",
+        "parameters": {
+            "varName": "String",
+            "varValue": "String"
+        }
+    },
+    {
+        "type": "SERVER_VARIABLE_PRESENT",
+        "extendsCondition": "SERVER_VARIABLE_CONDITION",
+        "parameters": {
+            "varName": "String",
+            "varValue": "String",
+            "anyValue": "boolean"
+        }
+    },
+    {
+        "type": "SERVER_VARIABLE_SMALLER",
+        "extendsCondition": "SERVER_VARIABLE_CONDITION",
+        "parameters": {
+            "varName": "String",
+            "varValue": "String"
+        }
+    },
+    {
+        "type": "SHIP_AI_ABSENT",
+        "extendsCondition": "SHIP_AI_PRESENT",
+    },
+    {
+        "type": "SHIP_AI_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "aiTypes": "List<ShipAI>",
+            "allReq": "boolean"
+        }
+    },
+    {
+        "type": "SHIP_CARGO_ABSENT",
+        "extendsCondition": "SHIP_CARGO_PRESENT",
+    },
+    {
+        "type": "SHIP_CARGO_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "cargoType": "ItemType",
+            "systemType": "SystemType",
+            "systemModel": "String",
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_CLASS_ABSENT",
+        "extendsCondition": "SHIP_CLASS_PRESENT",
+    },
+    {
+        "type": "SHIP_CLASS_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "shipClass": "ShipClass"
+        }
+    },
+    {
+        "type": "SHIP_COMBAT_ABSENT",
+        "extendsCondition": "SHIP_COMBAT_PRESENT",
+    },
+    {
+        "type": "SHIP_COMBAT_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+    },
+    {
+        "type": "SHIP_CONDITION",
+        "isAbstract": "true",
+        "extendsCondition": "PARENT_CONDITION",
+        "parameters": {
+            "allMobShips": "boolean",
+            "checkTargetShip": "boolean",
+            "checkShooterShip": "boolean"
+        }
+    },
+    {
+        "type": "SHIP_CREW_ABSENT",
+        "extendsCondition": "SHIP_CREW_PRESENT",
+    },
+    {
+        "type": "SHIP_CREW_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_DRONES_ABSENT",
+        "extendsCondition": "SHIP_DRONES_PRESENT",
+    },
+    {
+        "type": "SHIP_DRONES_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_HULL_ABSENT",
+        "extendsCondition": "SHIP_HULL_PRESENT",
+    },
+    {
+        "type": "SHIP_HULL_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_LEVEL_ABSENT",
+        "extendsCondition": "SHIP_LEVEL_PRESENT",
+    },
+    {
+        "type": "SHIP_LEVEL_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "shipLevel": "int"
+        }
+    },
+    {
+        "type": "SHIP_MISSILES_ABSENT",
+        "extendsCondition": "SHIP_MISSILES_PRESENT",
+    },
+    {
+        "type": "SHIP_MISSILES_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_NAME_ABSENT",
+        "extendsCondition": "SHIP_NAME_PRESENT",
+    },
+    {
+        "type": "SHIP_NAME_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "shipName": "String"
+        }
+    },
+    {
+        "type": "SHIP_POSITION_ABSENT",
+        "extendsCondition": "SHIP_POSITION_PRESENT",
+    },
+    {
+        "type": "SHIP_POSITION_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "areaStart": "String",
+            "areaEnd": "String"
+        }
+    },
+    {
+        "type": "SHIP_RACE_ABSENT",
+        "extendsCondition": "SHIP_RACE_PRESENT",
+    },
+    {
+        "type": "SHIP_RACE_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "race": "Race"
+        }
+    },
+    {
+        "type": "SHIP_SCRAP_ABSENT",
+        "extendsCondition": "SHIP_SCRAP_PRESENT",
+    },
+    {
+        "type": "SHIP_SCRAP_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_SHIELDS_ABSENT",
+        "extendsCondition": "SHIP_SHIELDS_PRESENT",
+    },
+    {
+        "type": "SHIP_SHIELDS_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "qty": "int"
+        }
+    },
+    {
+        "type": "SHIP_SYSTEM_ABSENT",
+        "extendsCondition": "SHIP_SYSTEM_PRESENT",
+    },
+    {
+        "type": "SHIP_SYSTEM_PRESENT",
+        "extendsCondition": "SHIP_CONDITION",
+        "parameters": {
+            "systemType": "SystemType",
+            "systemModel": "String",
+            "activeSystems": "boolean",
+            "qty": "int"
+        }
+    }
+]

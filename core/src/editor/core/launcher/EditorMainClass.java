@@ -27,7 +27,7 @@ public class EditorMainClass extends Game {
 		renderer.setProjectionMatrix(camera.combined);
 
 		this.setScreen(new MainScreen(batch, renderer, camera));
-		ConditionsService.loadConditions();
+//		ConditionsService.loadConditions();
 	}
 
 	@Override

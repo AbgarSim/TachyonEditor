@@ -72,15 +72,7 @@ public class DialogEditorInputProcessor implements InputProcessor {
     @Override
     public boolean touchDragged(int x, int y, int pointer) {
         Vector2 newTouch = new Vector2(x, y);
-        if (isDraggingCollidable) {
-            Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
-            Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
-            Vector2 delta = coordsNew.sub(coordsOld);
-            // Strange null pointer/deadlock bug :/
-            DialogueLine currentDrag = currentDrags.get(pointer);
-            if (currentDrag != null)
-                currentDrag.move(delta);
-        } else {
+        if(!isDraggingCollidable) {
             Vector2 delta = newTouch.cpy().sub(lastTouch);
             Vector3 p = viewport.getCamera().position.cpy();
             viewport.getCamera().position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
@@ -134,3 +126,12 @@ public class DialogEditorInputProcessor implements InputProcessor {
         return new Vector2(raw.x, raw.y);
     }
 }
+/*if (isDraggingCollidable) {
+            Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
+            Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
+            Vector2 delta = coordsNew.sub(coordsOld);
+            // Strange null pointer/deadlock bug :/
+            DialogueLine currentDrag = currentDrags.get(pointer);
+            if (currentDrag != null)
+                currentDrag.move(delta);
+        } else */

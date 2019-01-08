@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import editor.core.resource.ResourceManager;
@@ -18,8 +19,10 @@ public class DialogueEvent {
     private final Vector2 eventButtonProportions = new Vector2(40, 30);
 
     private final DialogueLine parent;
-    private Rectangle eventRectangle = new Rectangle();
-    private Rectangle eventButtonRectangle = new Rectangle();
+    //private Rectangle eventRectangle = new Rectangle();
+    //private Rectangle eventButtonRectangle = new Rectangle();
+
+    private TextField eventTextField;
 
     private CheckBox buttonToTargetPlayer;
     private TextButton buttonToRemoveEvent;
@@ -28,7 +31,8 @@ public class DialogueEvent {
     public DialogueEvent(DialogueLine parent) {
         this.parent = parent;
 
-        eventRectangle.set(this.parent.getPosition().x + 5, this.parent.getPosition().y - 5,
+        eventTextField = new TextField("Event ", ResourceManager.getSkin());
+        eventTextField.setBounds(this.parent.getPosition().x + 5, this.parent.getPosition().y - 5,
                 eventProportions.x, eventProportions.y);
 
         buttonToTargetPlayer = new CheckBox("T", ResourceManager.getSkin());
@@ -44,22 +48,19 @@ public class DialogueEvent {
     }
 
     public void setPosition(Vector2 delta) {
-        this.eventRectangle.x = delta.x;
-        this.eventRectangle.y = delta.y;
-        this.buttonToTargetPlayer.setPosition(eventRectangle.x + eventRectangle.width, delta.y);
+        this.eventTextField.setPosition(delta.x, delta.y);
+        this.buttonToTargetPlayer.setPosition(eventTextField.getX() + eventTextField.getWidth(), delta.y);
         this.buttonToRemoveEvent.setPosition(buttonToTargetPlayer.getX() + buttonToTargetPlayer.getWidth(), delta.y);
     }
 
     public Vector2 getProportions() {
-        return new Vector2(eventRectangle.width + eventButtonRectangle.width, eventRectangle.height);
+        return new Vector2(eventTextField.getWidth() + buttonToTargetPlayer.getWidth() + buttonToRemoveEvent.getWidth() + 30, eventTextField.getHeight());
     }
 
-    public void renderShapes(ShapeRenderer renderer) {
-        renderer.rect(eventRectangle.x, eventRectangle.y,
-                eventRectangle.width, eventRectangle.height);
-    }
 
-    public void renderButtons(Batch batch) {
+    public void render(Batch batch) {
+        eventTextField.act(Gdx.graphics.getDeltaTime());
+        eventTextField.draw(batch, 5f);
         buttonToTargetPlayer.act(Gdx.graphics.getDeltaTime());
         buttonToTargetPlayer.draw(batch, 5f);
         buttonToRemoveEvent.act(Gdx.graphics.getDeltaTime());

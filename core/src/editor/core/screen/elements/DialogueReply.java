@@ -9,10 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.soap.Text;
 
 import editor.core.resource.ResourceManager;
 import editor.core.screen.elements.condition.Condition;
@@ -34,8 +37,10 @@ public class DialogueReply {
     public boolean anyCondition;
 
 
-    private Rectangle messageRectangle = new Rectangle();
-    private Rectangle messageButtonRectangle = new Rectangle();
+   // private Rectangle messageRectangle = new Rectangle();
+   // private Rectangle messageButtonRectangle = new Rectangle();
+
+    private TextField messageTextField;
 
     private TextButton buttonToEditCondition;
     private TextButton buttonToRemoveReply;
@@ -45,11 +50,17 @@ public class DialogueReply {
         nextMessage = next;
         text = replyText;
         this.parent = parent;
-        messageRectangle.set(parent.getPosition().x + 5, parent.getPosition().y - 5,
+
+        messageTextField = new TextField("Default for now", ResourceManager.getSkin());
+        //messageRectangle.set(parent.getPosition().x + 5, parent.getPosition().y - 5,
+        //        replyProportions.x, replyProportions.y);
+
+        messageTextField.setBounds(parent.getPosition().x + 5, parent.getPosition().y - 5,
                 replyProportions.x, replyProportions.y);
+        ;
 
         buttonToEditCondition = new TextButton("Cond", ResourceManager.getSkin());
-        buttonToEditCondition.setBounds(parent.getPosition().x + 150, parent.getPosition().y - 5,
+        buttonToEditCondition.setBounds(parent.getPosition().x + messageTextField.getWidth() + 20, parent.getPosition().y - 5,
                 replyButtonProportions.x, replyButtonProportions.y);
         buttonToEditCondition.addListener(new EditConditionEventListener());
         parent.addActorToStage(buttonToEditCondition);
@@ -62,31 +73,32 @@ public class DialogueReply {
     }
 
     public Vector2 getProportions() {
-        return new Vector2(messageRectangle.width + messageButtonRectangle.width, messageRectangle.height);
+        return new Vector2(messageTextField.getWidth() + buttonToEditCondition.getWidth() + buttonToRemoveReply.getWidth() + 30, messageTextField.getHeight());
     }
 
     public void addCondition(Condition cond) {
         conditions.add(cond);
     }
 
-    public void setPosition(Vector2 delta) {
-        this.messageRectangle.x = delta.x;
-        this.messageRectangle.y = delta.y;
-        this.buttonToEditCondition.setBounds(messageRectangle.x + messageRectangle.width, delta.y, buttonToEditCondition.getWidth(), buttonToEditCondition.getHeight());
-        this.buttonToRemoveReply.setBounds(buttonToEditCondition.getX() + buttonToEditCondition.getWidth(), delta.y, buttonToRemoveReply.getWidth(), buttonToRemoveReply.getHeight());
+    public void setPosition(float x, float y) {
+        this.messageTextField.setPosition(x, y);
+        this.buttonToEditCondition.setPosition(messageTextField.getX() + messageTextField.getWidth(), y);
+        this.buttonToRemoveReply.setPosition(buttonToEditCondition.getX() + buttonToEditCondition.getWidth(), y);
     }
 
     public Vector2 getPosition() {
-        return new Vector2(messageRectangle.x, messageRectangle.y);
+        return new Vector2(messageTextField.getX(), messageTextField.getY());
     }
 
 
-    public void renderShapes(ShapeRenderer renderer) {
-        renderer.rect(messageRectangle.x, messageRectangle.y,
-                messageRectangle.width, messageRectangle.height);
-    }
+    //public void renderShapes(ShapeRenderer renderer) {
+    //    renderer.rect(messageRectangle.x, messageRectangle.y,
+    //            messageRectangle.width, messageRectangle.height);
+    //}
 
-    public void renderButtons(Batch batch) {
+    public void render(Batch batch) {
+        messageTextField.act(Gdx.graphics.getDeltaTime());
+        messageTextField.draw(batch, 5f);
         buttonToEditCondition.act(Gdx.graphics.getDeltaTime());
         buttonToEditCondition.draw(batch, 5f);
         buttonToRemoveReply.act(Gdx.graphics.getDeltaTime());
@@ -105,13 +117,12 @@ public class DialogueReply {
         }
     }
 
-    class RemoveReplyListener extends ClickListener{
+    class RemoveReplyListener extends ClickListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             DialogueReply.this.parent.removeReply(DialogueReply.this);
             DialogueReply.this.buttonToEditCondition.remove();
             DialogueReply.this.buttonToRemoveReply.remove();
-            DialogueReply.this.parent.calculateElementsPositioning();
             return true;
         }
     }

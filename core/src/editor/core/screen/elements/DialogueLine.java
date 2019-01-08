@@ -2,14 +2,17 @@ package editor.core.screen.elements;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.HashMap;
@@ -38,11 +41,12 @@ public class DialogueLine {
     private Rectangle frameRectangle;
     private Rectangle messageFrameRectangle;
 
+    private TextField dialogLineMessageText;
 
+
+    private TextButton dragButton;
     private TextButton buttonToAddReply;
     private TextButton buttonToAddEvent;
-
-
 
 
     public DialogueLine(Vector2 pos, MainScreen screen) {
@@ -54,10 +58,14 @@ public class DialogueLine {
         id = "1";
         messageText = "Testing 123456789987654321";
         frameRectangle = new Rectangle();
-        frameRectangle.set(posx, posy, 235, calculateFrameHeight());
+        frameRectangle.set(posx, posy, 225, calculateFrameHeight());
 
         messageFrameRectangle = new Rectangle();
         messageFrameRectangle.set(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);
+
+        dialogLineMessageText = new TextField(messageText, ResourceManager.getSkin());
+        dialogLineMessageText.setBounds(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);
+
 
         //replies.put(String.valueOf(counter++), new DialogueReply("Qw", "123", "BlaBla", this));
         //replies.put(String.valueOf(counter++), new DialogueReply("Qw1", "1234", "BlaBla", this));
@@ -67,14 +75,17 @@ public class DialogueLine {
         //events.put(String.valueOf(counter++), new DialogueEvent(this));
         //events.put("e3", new DialogueEvent(this));
 
+        dragButton = new TextButton("Drag", ResourceManager.getSkin());
         buttonToAddReply = new TextButton("Add Reply", ResourceManager.getSkin());
         buttonToAddEvent = new TextButton("Add Event", ResourceManager.getSkin());
 
-
+        dragButton.addListener(this.new DragListener());
         buttonToAddReply.addListener(this.new AddReplyListener());
         buttonToAddEvent.addListener(this.new AddEventListener());
 
         calculateElementsPositioning();
+        addActorToStage(dialogLineMessageText);
+        addActorToStage(dragButton);
         addActorToStage(buttonToAddReply);
         addActorToStage(buttonToAddEvent);
     }
@@ -83,7 +94,7 @@ public class DialogueLine {
         this.messageText = messageText;
     }
 
-    public Rectangle getMessageFrameRectangle(){
+    public Rectangle getMessageFrameRectangle() {
         return new Rectangle(messageFrameRectangle);
     }
 
@@ -100,7 +111,7 @@ public class DialogueLine {
         replies.put(String.valueOf(counter++), new DialogueReply("Ex", "1234", "Lel", this));
     }
 
-    public void removeReply(DialogueReply reply){
+    public void removeReply(DialogueReply reply) {
         replies.values().remove(reply);
     }
 
@@ -108,7 +119,7 @@ public class DialogueLine {
         events.put(String.valueOf(counter++), new DialogueEvent(this));
     }
 
-    public void removeEvent(DialogueEvent event){
+    public void removeEvent(DialogueEvent event) {
         events.values().remove(event);
     }
 
@@ -130,7 +141,11 @@ public class DialogueLine {
         frameRectangle.x = x;
         frameRectangle.y = y;
         messageFrameRectangle.x = x + 5;
-        messageFrameRectangle.y = y + frameRectangle.height - messageFrameRectangle.height - 5;
+        messageFrameRectangle.y = frameRectangle.y + frameRectangle.height - 35;
+    }
+
+    public Camera getCamera() {
+        return parent.getCamera();
     }
 
     public void calculateElementsPositioning() {
@@ -146,9 +161,13 @@ public class DialogueLine {
         }
         elementY += 10;
         for (DialogueReply reply : replies.values()) {
-            reply.setPosition(new Vector2(frameRectangle.x + 5, elementY));
+            reply.setPosition(frameRectangle.x + 5, elementY);
             elementY += reply.getProportions().y;
         }
+        //messageFrameRectangle.setPosition(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35);
+        dialogLineMessageText.setPosition(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35);
+        dragButton.setBounds(messageFrameRectangle.x + messageFrameRectangle.width + 5, frameRectangle.y + frameRectangle.height - 35,
+                40,30);
     }
 
     private int calculateFrameHeight() {
@@ -158,7 +177,7 @@ public class DialogueLine {
             for (DialogueEvent event : events.values()) {
                 frameHeight += event.getProportions().y;
             }
-        }else{
+        } else {
             frameHeight += 10;
         }
 
@@ -173,17 +192,12 @@ public class DialogueLine {
         return frameHeight;
     }
 
-    public void move(Vector2 delta) {
-        Vector2 pos = getPosition();
-        moveFrameAndMessageRectangles(pos.x + delta.x, pos.y + delta.y);
-        calculateElementsPositioning();
-    }
-
 
     public void render(ShapeRenderer renderer, SpriteBatch batch) {
         renderer.setAutoShapeType(true);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.BLACK);
+        calculateElementsPositioning();
 
         //Calculate frame height
         frameRectangle.height = calculateFrameHeight();
@@ -191,20 +205,17 @@ public class DialogueLine {
         //Render frame
         renderer.rect(frameRectangle.x, frameRectangle.y, frameRectangle.width, frameRectangle.height);
 
+        dialogLineMessageText.act(Gdx.graphics.getDeltaTime());
+        dragButton.act(Gdx.graphics.getDeltaTime());
         buttonToAddReply.act(Gdx.graphics.getDeltaTime());
         buttonToAddEvent.act(Gdx.graphics.getDeltaTime());
 
 
         //Render text
-        renderer.rect(messageFrameRectangle.x, frameRectangle.y + frameRectangle.height - 35,
-                messageFrameRectangle.width, messageFrameRectangle.height);
+        //renderer.rect(messageFrameRectangle.x,messageFrameRectangle.y,
+        //       messageFrameRectangle.width, messageFrameRectangle.height);
 
-        for (DialogueReply reply : replies.values()) {
-            reply.renderShapes(renderer);
-        }
-        for (DialogueEvent event : events.values()) {
-            event.renderShapes(renderer);
-        }
+
         renderer.end();
         batch.begin();
         String messageToDraw;
@@ -216,21 +227,60 @@ public class DialogueLine {
         ResourceManager.getBitmapFont().draw(batch, messageToDraw, frameRectangle.x + 8, frameRectangle.y + frameRectangle.height - 8);
 
         for (DialogueReply reply : replies.values()) {
-            reply.renderButtons(batch);
+            reply.render(batch);
         }
         for (DialogueEvent event : events.values()) {
-            event.renderButtons(batch);
+            event.render(batch);
         }
+        dialogLineMessageText.draw(batch, 5f);
+        dragButton.draw(batch, 5f);
         buttonToAddReply.draw(batch, 5f);
         buttonToAddEvent.draw(batch, 5f);
         batch.end();
+    }
+
+
+    class DragListener extends ClickListener {
+
+        private Vector2 lastTouch = new Vector2();
+
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            Vector2 coords = unprojectCoordinates(x, y);
+            lastTouch = coords;
+            return true;
+        }
+
+        @Override
+        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+
+            //Vector2 newTouch = unprojectCoordinates(x, y);
+            //Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
+            //Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
+            //Vector2 delta = coordsNew.sub(coordsOld);
+            //DialogueLine.this.move(delta);
+
+            Vector2 oldButtonCoords = new Vector2(dragButton.getX(), dragButton.getY());
+            dragButton.moveBy(x - dragButton.getWidth() / 2, y - dragButton.getHeight() / 2);
+
+            Vector2 oldCoords = DialogueLine.this.getPosition();
+
+
+            DialogueLine.this.moveFrameAndMessageRectangles(oldCoords.x + (dragButton.getX() - oldButtonCoords.x), oldCoords.y + (dragButton.getY() - oldButtonCoords.y));
+
+        }
+
+        private Vector2 unprojectCoordinates(float x, float y) {
+            Vector3 raw = new Vector3(x, y, 0);
+            DialogueLine.this.getCamera().unproject(raw);
+            return new Vector2(raw.x, raw.y);
+        }
     }
 
     class AddReplyListener extends ClickListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             DialogueLine.this.addReply();
-            DialogueLine.this.calculateElementsPositioning();
             return true;
         }
     }
@@ -239,7 +289,6 @@ public class DialogueLine {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             DialogueLine.this.addEvent();
-            DialogueLine.this.calculateElementsPositioning();
             return true;
         }
     }

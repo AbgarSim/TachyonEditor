@@ -56,6 +56,10 @@ public class MainScreen implements Screen {
         return stage;
     }
 
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
     public void addDialogueLine(Vector2 pos) {
         screenElements.add(dialogueLineFactory.getDialogueLine(pos));
     }

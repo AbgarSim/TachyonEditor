@@ -1,11 +1,15 @@
 package editor.core.control;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.HashMap;
+
+import javax.swing.text.View;
 
 import editor.core.screen.elements.DialogueLine;
 import editor.core.screen.MainScreen;
@@ -13,16 +17,17 @@ import editor.core.screen.MainScreen;
 public class DialogEditorInputProcessor implements InputProcessor {
 
     private OrthographicCamera camera;
+    private Viewport viewport;
     private MainScreen screen;
     private Vector2 lastTouch = new Vector2();
     private boolean isDraggingCollidable = false;
     private HashMap<Integer, DialogueLine> currentDrags = new HashMap<>();
 
 
-    public DialogEditorInputProcessor(OrthographicCamera camera, MainScreen screen) {
+    public DialogEditorInputProcessor(OrthographicCamera camera, Viewport viewport, MainScreen screen) {
         this.camera = camera;
         this.screen = screen;
-
+        this.viewport = viewport;
     }
 
     @Override
@@ -77,9 +82,9 @@ public class DialogEditorInputProcessor implements InputProcessor {
                 currentDrag.move(delta);
         } else {
             Vector2 delta = newTouch.cpy().sub(lastTouch);
-            Vector3 p = camera.position.cpy();
-            camera.position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
-            camera.update();
+            Vector3 p = viewport.getCamera().position.cpy();
+            viewport.getCamera().position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
+            viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         }
         lastTouch = newTouch;
         return false;

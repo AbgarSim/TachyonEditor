@@ -1,9 +1,13 @@
 package editor.core.control;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+import javax.swing.text.View;
 
 import editor.core.screen.MainScreen;
 
@@ -12,10 +16,12 @@ public class DialogueGestureListener implements GestureDetector.GestureListener{
 
     private float initialScale = 1;
     private OrthographicCamera camera;
+    private Viewport viewport;
     private MainScreen screen;
 
-    public DialogueGestureListener(OrthographicCamera camera, MainScreen screen) {
+    public DialogueGestureListener(OrthographicCamera camera, Viewport viewport, MainScreen screen) {
         this.camera = camera;
+        this.viewport = viewport;
         this.screen = screen;
     }
 
@@ -45,7 +51,7 @@ public class DialogueGestureListener implements GestureDetector.GestureListener{
     public boolean longPress(float x, float y) {
         Vector2 coords = unprojectCoordinates(x, y);
         screen.addDialogueLine(coords);
-        return false;
+        return true;
     }
 
     @Override
@@ -70,9 +76,11 @@ public class DialogueGestureListener implements GestureDetector.GestureListener{
     public boolean zoom(float originalDistance, float currentDistance) {
         float ratio = originalDistance / currentDistance;
         camera.zoom = initialScale * ratio;
-        if(camera.zoom >= 0)
+        if(camera.zoom >= 0) {
             camera.update();
-        return false;
+            viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+        return true;
     }
 
     @Override

@@ -3,12 +3,11 @@ package editor.core.screen.elements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -21,28 +20,29 @@ import editor.core.screen.MainScreen;
 /*
  * A single dialogue line
  */
-public class DialogueLine{
+public class DialogueLine {
 
     private static int counter;
     private MainScreen parent;
 
-    public String id;
-    public String messageText;
+    private String id;
+    private String messageText;
 
     public boolean randomEvent;
     public boolean remote;
 
-    public HashMap<String, DialogueEvent> events = new HashMap<>();
+    private HashMap<String, DialogueEvent> events = new HashMap<>();
 
-    public HashMap<String, DialogueReply> replies = new HashMap<>();
-
-    private BitmapFont messageFont;
+    private HashMap<String, DialogueReply> replies = new HashMap<>();
 
     private Rectangle frameRectangle;
     private Rectangle messageFrameRectangle;
 
+
     private TextButton buttonToAddReply;
-    private TextButton getButtonToAddEvent;
+    private TextButton buttonToAddEvent;
+
+
 
 
     public DialogueLine(Vector2 pos, MainScreen screen) {
@@ -54,56 +54,78 @@ public class DialogueLine{
         id = "1";
         messageText = "Testing 123456789987654321";
         frameRectangle = new Rectangle();
-        frameRectangle.set(posx, posy, 195, calculateFrameHeight());
-
-        messageFont = new BitmapFont();
-        messageFont.setColor(Color.BLACK);
-        messageFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        frameRectangle.set(posx, posy, 235, calculateFrameHeight());
 
         messageFrameRectangle = new Rectangle();
-        messageFrameRectangle.set(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, 185, 30);
+        messageFrameRectangle.set(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);
 
-        replies.put(String.valueOf(counter++), new DialogueReply("Qw", "123", "BlaBla", this));
-        replies.put(String.valueOf(counter++), new DialogueReply("Qw1", "1234", "BlaBla", this));
-        replies.put(String.valueOf(counter++), new DialogueReply("Qw2", "123414", "QweRty", this));
+        //replies.put(String.valueOf(counter++), new DialogueReply("Qw", "123", "BlaBla", this));
+        //replies.put(String.valueOf(counter++), new DialogueReply("Qw1", "1234", "BlaBla", this));
+        //replies.put(String.valueOf(counter++), new DialogueReply("Qw2", "123414", "QweRty", this));
 
-        events.put(String.valueOf(counter++), new DialogueEvent(this));
-        events.put(String.valueOf(counter++), new DialogueEvent(this));
+        //events.put(String.valueOf(counter++), new DialogueEvent(this));
+        //events.put(String.valueOf(counter++), new DialogueEvent(this));
         //events.put("e3", new DialogueEvent(this));
 
-        buttonToAddReply = new TextButton("Add Reply", ResourceManager.getButtonSkin());
-        getButtonToAddEvent = new TextButton("Add Event", ResourceManager.getButtonSkin());
+        buttonToAddReply = new TextButton("Add Reply", ResourceManager.getSkin());
+        buttonToAddEvent = new TextButton("Add Event", ResourceManager.getSkin());
+
 
         buttonToAddReply.addListener(this.new AddReplyListener());
-        getButtonToAddEvent.addListener(this.new AddEventListener());
+        buttonToAddEvent.addListener(this.new AddEventListener());
 
         calculateElementsPositioning();
-        parent.addActorToStage(buttonToAddReply);
-        parent.addActorToStage(getButtonToAddEvent);
-    }
-
-    public String getMessageText() {
-        return messageText;
+        addActorToStage(buttonToAddReply);
+        addActorToStage(buttonToAddEvent);
     }
 
     public void setMessageText(String messageText) {
         this.messageText = messageText;
     }
 
+    public Rectangle getMessageFrameRectangle(){
+        return new Rectangle(messageFrameRectangle);
+    }
+
+    public MainScreen getParentScreen() {
+        return parent;
+    }
 
     //Get rectangle position
     public Vector2 getPosition() {
         return new Vector2(frameRectangle.x, frameRectangle.y);
     }
 
-    public void addReply(){
+    public void addReply() {
         replies.put(String.valueOf(counter++), new DialogueReply("Ex", "1234", "Lel", this));
     }
 
-    public void addEvent(){
+    public void removeReply(DialogueReply reply){
+        replies.values().remove(reply);
+    }
+
+    public void addEvent() {
         events.put(String.valueOf(counter++), new DialogueEvent(this));
     }
-    //Set rectangles position
+
+    public void removeEvent(DialogueEvent event){
+        events.values().remove(event);
+    }
+
+    public void addActorToStage(Actor actor) {
+        parent.addActorToStage(actor);
+    }
+
+    /**
+     * Get rectangle width , height proportion
+     */
+    public Vector2 getProportions() {
+        return new Vector2(frameRectangle.getWidth(), frameRectangle.getHeight());
+    }
+
+    /**
+     * Set rectangles position
+     */
     private void moveFrameAndMessageRectangles(float x, float y) {
         frameRectangle.x = x;
         frameRectangle.y = y;
@@ -111,16 +133,11 @@ public class DialogueLine{
         messageFrameRectangle.y = y + frameRectangle.height - messageFrameRectangle.height - 5;
     }
 
-    //Get rectangle width , height proportions
-    public Vector2 getProportions() {
-        return new Vector2(frameRectangle.getWidth(), frameRectangle.getHeight());
-    }
-
-    private void calculateElementsPositioning() {
+    public void calculateElementsPositioning() {
         int elementY = (int) (frameRectangle.y) + 10;
 
         buttonToAddReply.setBounds(frameRectangle.x + 5, elementY, 90, 40);
-        getButtonToAddEvent.setBounds(frameRectangle.x + buttonToAddReply.getWidth() + 10, elementY, 90, 40);
+        buttonToAddEvent.setBounds(frameRectangle.x + buttonToAddReply.getWidth() + 10, elementY, 90, 40);
         elementY += buttonToAddReply.getHeight();
 
         for (DialogueEvent event : events.values()) {
@@ -141,6 +158,8 @@ public class DialogueLine{
             for (DialogueEvent event : events.values()) {
                 frameHeight += event.getProportions().y;
             }
+        }else{
+            frameHeight += 10;
         }
 
         if (!replies.values().isEmpty()) {
@@ -173,7 +192,7 @@ public class DialogueLine{
         renderer.rect(frameRectangle.x, frameRectangle.y, frameRectangle.width, frameRectangle.height);
 
         buttonToAddReply.act(Gdx.graphics.getDeltaTime());
-        getButtonToAddEvent.act(Gdx.graphics.getDeltaTime());
+        buttonToAddEvent.act(Gdx.graphics.getDeltaTime());
 
 
         //Render text
@@ -181,10 +200,10 @@ public class DialogueLine{
                 messageFrameRectangle.width, messageFrameRectangle.height);
 
         for (DialogueReply reply : replies.values()) {
-            reply.render(renderer);
+            reply.renderShapes(renderer);
         }
         for (DialogueEvent event : events.values()) {
-            event.render(renderer);
+            event.renderShapes(renderer);
         }
         renderer.end();
         batch.begin();
@@ -194,9 +213,16 @@ public class DialogueLine{
         } else {
             messageToDraw = messageText;
         }
-        messageFont.draw(batch, messageToDraw, frameRectangle.x + 8, frameRectangle.y + frameRectangle.height - 8);
+        ResourceManager.getBitmapFont().draw(batch, messageToDraw, frameRectangle.x + 8, frameRectangle.y + frameRectangle.height - 8);
+
+        for (DialogueReply reply : replies.values()) {
+            reply.renderButtons(batch);
+        }
+        for (DialogueEvent event : events.values()) {
+            event.renderButtons(batch);
+        }
         buttonToAddReply.draw(batch, 5f);
-        getButtonToAddEvent.draw(batch, 5f);
+        buttonToAddEvent.draw(batch, 5f);
         batch.end();
     }
 
@@ -217,6 +243,7 @@ public class DialogueLine{
             return true;
         }
     }
+
 
 }
 

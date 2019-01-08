@@ -8,14 +8,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import editor.core.control.DialogGesturesDetector;
 import editor.core.control.DialogEditorInputProcessor;
+import editor.core.resource.ResourceManager;
 import editor.core.screen.elements.DialogueLine;
 import editor.core.screen.elements.DialogueLineFactory;
 
@@ -27,8 +33,9 @@ public class MainScreen implements Screen {
 
     private float worldWidth;
     private float worldHeight;
-    private OrthographicCamera camera;
 
+    private OrthographicCamera camera;
+    private Viewport viewport;
 
     private Stage stage;
 
@@ -45,11 +52,15 @@ public class MainScreen implements Screen {
         this.renderer = renderer;
     }
 
-    public void addDialogueLine(Vector2 pos){
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void addDialogueLine(Vector2 pos) {
         screenElements.add(dialogueLineFactory.getDialogueLine(pos));
     }
 
-    public void addActorToStage(Actor actor){
+    public void addActorToStage(Actor actor) {
         stage.addActor(actor);
     }
 
@@ -59,15 +70,17 @@ public class MainScreen implements Screen {
         worldHeight = Gdx.graphics.getHeight();
 
 
-        camera = new OrthographicCamera(worldWidth, worldHeight);
+        camera = new OrthographicCamera();
+        viewport = new StretchViewport(worldWidth, worldHeight, camera);
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         camera.position.set(worldWidth / 2, worldHeight / 2, 0);
         camera.update();
 
-        stage = new Stage();
+        stage = new Stage(viewport, spriteBatch);
 
         inputMultiplexer = new InputMultiplexer();
-        input = new DialogEditorInputProcessor(camera, this);
-        gestures = new DialogGesturesDetector(camera, this);
+        input = new DialogEditorInputProcessor(camera, viewport, this);
+        gestures = new DialogGesturesDetector(camera, viewport, this);
 
 
         inputMultiplexer.addProcessor(stage);
@@ -81,7 +94,6 @@ public class MainScreen implements Screen {
 
         screenElements.add(dialogueLineFactory.getDialogueLine("I dunno", new Vector2(50, 200)));
         screenElements.add(dialogueLineFactory.getDialogueLine("I dunno x2", new Vector2(550, 200)));
-
     }
 
     @Override
@@ -91,9 +103,12 @@ public class MainScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.setProjectionMatrix(camera.combined);
         spriteBatch.setProjectionMatrix(camera.combined);
-        for(DialogueLine line : screenElements){
+        for (DialogueLine line : screenElements) {
             line.render(renderer, spriteBatch);
         }
+
+        stage.act();
+        stage.draw();
 
     }
 
@@ -121,4 +136,5 @@ public class MainScreen implements Screen {
     public void dispose() {
 
     }
+
 }

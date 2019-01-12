@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import editor.core.screen.MainScreen;
-import editor.core.screen.elements.condition.ConditionsService;
 
 public class EditorMainClass extends Game {
 

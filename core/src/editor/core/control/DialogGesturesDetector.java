@@ -12,6 +12,7 @@ import editor.core.screen.MainScreen;
 
 public class DialogGesturesDetector extends GestureDetector {
 
+
     public DialogGesturesDetector(OrthographicCamera camera, Viewport viewport, MainScreen screen) {
         super(new DialogueGestureListener(camera, viewport, screen));
     }

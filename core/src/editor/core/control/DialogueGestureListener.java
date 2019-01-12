@@ -19,6 +19,7 @@ public class DialogueGestureListener implements GestureDetector.GestureListener{
     private Viewport viewport;
     private MainScreen screen;
 
+
     public DialogueGestureListener(OrthographicCamera camera, Viewport viewport, MainScreen screen) {
         this.camera = camera;
         this.viewport = viewport;
@@ -74,6 +75,7 @@ public class DialogueGestureListener implements GestureDetector.GestureListener{
 
     @Override
     public boolean zoom(float originalDistance, float currentDistance) {
+        this.screen.setZoomPointers(2);
         float ratio = originalDistance / currentDistance;
         camera.zoom = initialScale * ratio;
         if(camera.zoom >= 0) {

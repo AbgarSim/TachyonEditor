@@ -1,9 +1,7 @@
-package editor.core.screen.elements;
+package editor.core.elements.visual;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -11,16 +9,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import editor.core.elements.model.DialogueEventModel;
 import editor.core.resource.ResourceManager;
 
-public class DialogueEvent {
+public class DialogueEventElement {
 
-    private final Vector2 eventProportions = new Vector2(135, 30);
+    private final Vector2 eventProportions;
     private final Vector2 eventButtonProportions = new Vector2(40, 30);
 
-    private final DialogueLine parent;
-    //private Rectangle eventRectangle = new Rectangle();
-    //private Rectangle eventButtonRectangle = new Rectangle();
+    private final DialogueLineElement parent;
+    private final DialogueEventModel model;
 
     private TextField eventTextField;
 
@@ -28,8 +26,10 @@ public class DialogueEvent {
     private TextButton buttonToRemoveEvent;
 
 
-    public DialogueEvent(DialogueLine parent) {
+    public DialogueEventElement(DialogueEventModel model, DialogueLineElement parent) {
         this.parent = parent;
+        this.model = model;
+        eventProportions = new Vector2(parent.getProportions().x - 85, 30);
 
         eventTextField = new TextField("Event ", ResourceManager.getSkin());
         eventTextField.setBounds(this.parent.getPosition().x + 5, this.parent.getPosition().y - 5,
@@ -70,10 +70,10 @@ public class DialogueEvent {
     class RemoveEventListener extends ClickListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            DialogueEvent.this.parent.removeEvent(DialogueEvent.this);
-            DialogueEvent.this.buttonToTargetPlayer.remove();
-            DialogueEvent.this.buttonToRemoveEvent.remove();
-            DialogueEvent.this.parent.calculateElementsPositioning();
+            DialogueEventElement.this.parent.removeEvent(DialogueEventElement.this);
+            DialogueEventElement.this.buttonToTargetPlayer.remove();
+            DialogueEventElement.this.buttonToRemoveEvent.remove();
+            DialogueEventElement.this.parent.calculateElementsPositioning();
             return true;
         }
     }

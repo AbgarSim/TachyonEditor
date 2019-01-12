@@ -9,9 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.HashMap;
 
-import javax.swing.text.View;
-
-import editor.core.screen.elements.DialogueLine;
+import editor.core.elements.visual.DialogueLineElement;
 import editor.core.screen.MainScreen;
 
 public class DialogEditorInputProcessor implements InputProcessor {
@@ -21,7 +19,9 @@ public class DialogEditorInputProcessor implements InputProcessor {
     private MainScreen screen;
     private Vector2 lastTouch = new Vector2();
     private boolean isDraggingCollidable = false;
-    private HashMap<Integer, DialogueLine> currentDrags = new HashMap<>();
+
+
+    private HashMap<Integer, DialogueLineElement> currentDrags = new HashMap<>();
 
 
     public DialogEditorInputProcessor(OrthographicCamera camera, Viewport viewport, MainScreen screen) {
@@ -50,18 +50,14 @@ public class DialogEditorInputProcessor implements InputProcessor {
         lastTouch.x = x;
         lastTouch.y = y;
         Vector2 coords = unprojectCoordinates(x, y);
-        DialogueLine currentDrag = getCollisionIfExist(coords);
-        if (currentDrag != null) {
-            isDraggingCollidable = true;
-            currentDrags.put(pointer, currentDrag);
-        }
         return true;
     }
 
     @Override
     public boolean touchUp(int i, int i1, int pointer, int i3) {
+        this.screen.decrementZoomPointers();
         if (isDraggingCollidable) {
-            DialogueLine currentDrag = currentDrags.get(pointer);
+            DialogueLineElement currentDrag = currentDrags.get(pointer);
             if (currentDrag != null)
                 currentDrags.remove(pointer);
             isDraggingCollidable = false;
@@ -71,14 +67,17 @@ public class DialogEditorInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int x, int y, int pointer) {
-        Vector2 newTouch = new Vector2(x, y);
-        if(!isDraggingCollidable) {
-            Vector2 delta = newTouch.cpy().sub(lastTouch);
-            Vector3 p = viewport.getCamera().position.cpy();
-            viewport.getCamera().position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
-            viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        if (this.screen.getZoomPointers() == 0) {
+            Vector2 newTouch = new Vector2(x, y);
+            if (!isDraggingCollidable) {
+                Vector2 delta = newTouch.cpy().sub(lastTouch);
+                Vector3 p = viewport.getCamera().position.cpy();
+                viewport.getCamera().position.set((p.x - delta.x * camera.zoom), (p.y + delta.y * camera.zoom), 0);
+                viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+            }
+            lastTouch = newTouch;
+            return true;
         }
-        lastTouch = newTouch;
         return false;
     }
 
@@ -100,8 +99,8 @@ public class DialogEditorInputProcessor implements InputProcessor {
     }
 
 
-    public DialogueLine getCollisionIfExist(Vector2 coords) {
-        for (DialogueLine line : screen.screenElements) {
+    public DialogueLineElement getCollisionIfExist(Vector2 coords) {
+        for (DialogueLineElement line : screen.screenElements) {
             if ((coords.x >= line.getPosition().x &&
                     coords.x <= (line.getPosition().x + line.getProportions().x) &&
                     coords.y >= line.getPosition().y &&
@@ -120,18 +119,11 @@ public class DialogEditorInputProcessor implements InputProcessor {
         return null;
     }
 
+
     private Vector2 unprojectCoordinates(float x, float y) {
         Vector3 raw = new Vector3(x, y, 0);
         camera.unproject(raw);
         return new Vector2(raw.x, raw.y);
     }
 }
-/*if (isDraggingCollidable) {
-            Vector2 coordsOld = unprojectCoordinates(lastTouch.x, lastTouch.y);
-            Vector2 coordsNew = unprojectCoordinates(newTouch.x, newTouch.y);
-            Vector2 delta = coordsNew.sub(coordsOld);
-            // Strange null pointer/deadlock bug :/
-            DialogueLine currentDrag = currentDrags.get(pointer);
-            if (currentDrag != null)
-                currentDrag.move(delta);
-        } else */
+

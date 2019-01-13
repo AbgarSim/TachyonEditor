@@ -12,8 +12,6 @@ public class ResourceManager {
 
     private static Skin buttonSkin;
     private static BitmapFont messageFont;
-    private static Sprite triangle;
-
     public static Skin getSkin() {
         if (buttonSkin == null) {
             buttonSkin = new Skin(Gdx.files.internal("clean-crispy-ui.json"));
@@ -30,10 +28,4 @@ public class ResourceManager {
         return messageFont;
     }
 
-    public static Sprite getTriangleSprite() {
-        if (triangle == null) {
-            triangle = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("triangle.png"))));
-        }
-        return triangle;
-    }
 }

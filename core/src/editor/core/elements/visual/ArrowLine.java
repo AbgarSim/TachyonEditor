@@ -89,11 +89,31 @@ public class ArrowLine {
 
 
         } else if (result == distToLeftPoint) {
-            to = leftMiddleConnectPoint;
-            isLeftConnectPoint = true;
+            if (isFromRightConnectPoint && (from.x >= leftMiddleConnectPoint.x - 20)) {
+                if (distToUpperPoint <= distToLowerPoint) {
+                    to = upperConnectPoint;
+                    isUpperConnectPoint = true;
+                } else {
+                    to = lowerConnectPoint;
+                    isLowerConnectPoint = true;
+                }
+            } else {
+                to = leftMiddleConnectPoint;
+                isLeftConnectPoint = true;
+            }
         } else {
-            to = rightMiddleConnectPoint;
-            isRightConnectPoint = true;
+            if (isFromLeftConnectPoint && (from.x <= rightMiddleConnectPoint.x + 20)) {
+                if (distToUpperPoint <= distToLowerPoint) {
+                    to = upperConnectPoint;
+                    isUpperConnectPoint = true;
+                } else {
+                    to = lowerConnectPoint;
+                    isLowerConnectPoint = true;
+                }
+            } else {
+                to = rightMiddleConnectPoint;
+                isRightConnectPoint = true;
+            }
         }
     }
 
@@ -119,7 +139,7 @@ public class ArrowLine {
         calculateToPoint();
 
         renderArrowPath(renderer);
-        //renderArrowHead(batch);
+        renderArrowHead(renderer);
         renderer.end();
     }
 
@@ -154,8 +174,48 @@ public class ArrowLine {
         }
     }
 
-    private void renderArrowHead(SpriteBatch batch) {
+    private void renderArrowHead(ShapeRenderer renderer) {
         Vector2 arrowHead = new Vector2(to);
+        Vector2 internalPoint;
+        Vector2 trianglePoint1;
+        Vector2 trianglePoint2;
+        if (isLowerConnectPoint) {
+            internalPoint = new Vector2(arrowHead.x, arrowHead.y + 20);
+            trianglePoint1 = new Vector2(internalPoint.x - 10, internalPoint.y);
+            trianglePoint2 = new Vector2(internalPoint.x + 10, internalPoint.y);
+        } else if (isUpperConnectPoint) {
+            internalPoint = new Vector2(arrowHead.x, arrowHead.y - 20);
+            trianglePoint1 = new Vector2(internalPoint.x - 10, internalPoint.y);
+            trianglePoint2 = new Vector2(internalPoint.x + 10, internalPoint.y);
+        } else if (isLeftConnectPoint) {
+            internalPoint = new Vector2(arrowHead.x - 20, arrowHead.y);
+            trianglePoint1 = new Vector2(internalPoint.x, internalPoint.y - 10);
+            trianglePoint2 = new Vector2(internalPoint.x, internalPoint.y + 10);
+        } else {
+            internalPoint = new Vector2(arrowHead.x + 20, arrowHead.y);
+            trianglePoint1 = new Vector2(internalPoint.x, internalPoint.y - 10);
+            trianglePoint2 = new Vector2(internalPoint.x, internalPoint.y + 10);
+        }
+
+        renderer.triangle(arrowHead.x, arrowHead.y, trianglePoint1.x, trianglePoint1.y, trianglePoint2.x, trianglePoint2.y);
+    }
+
+    private boolean collisionExist(Vector2 coords) {
+        for (DialogueLineElement line : this.toElement.getParentScreen().getDialogue().getDialogueLines()) {
+            if ((coords.x >= line.getPosition().x &&
+                    coords.x <= (line.getPosition().x + line.getProportions().x) &&
+                    coords.y >= line.getPosition().y &&
+                    coords.y <= (line.getPosition().y + line.getProportions().y))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+
+        /*
+        * Vector2 arrowHead = new Vector2(to);
         Sprite arrowHeadSprite = ResourceManager.getTriangleSprite();
         batch.begin();
         arrowHeadSprite.setSize(30, 40);
@@ -175,19 +235,4 @@ public class ArrowLine {
         }
         arrowHeadSprite.draw(batch);
         batch.end();
-
-    }
-
-    private boolean collisionExist(Vector2 coords) {
-        for (DialogueLineElement line : this.toElement.getParentScreen().getDialogue().getDialogueLines()) {
-            if ((coords.x >= line.getPosition().x &&
-                    coords.x <= (line.getPosition().x + line.getProportions().x) &&
-                    coords.y >= line.getPosition().y &&
-                    coords.y <= (line.getPosition().y + line.getProportions().y))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-}
+        * */

@@ -3,6 +3,7 @@ package editor.core.elements.factory;
 import com.badlogic.gdx.math.Vector2;
 
 import editor.core.elements.model.DialogueLineModel;
+import editor.core.elements.visual.Dialogue;
 import editor.core.elements.visual.DialogueLineElement;
 import editor.core.screen.MainScreen;
 
@@ -15,12 +16,12 @@ public class DialogueLineFactory {
     }
 
     public DialogueLineElement getDialogueLine(Vector2 positionToCreate) {
-        DialogueLineElement lineToCreate = new DialogueLineElement(positionToCreate, new DialogueLineModel(String.valueOf(counter++), "DefaultMessage"), parent);
+        DialogueLineElement lineToCreate = new DialogueLineElement(positionToCreate, new DialogueLineModel(String.valueOf(counter++), "DefaultMessage"), parent, parent.getDialogue());
         return lineToCreate;
     }
 
     public DialogueLineElement getDialogueLine(String message, Vector2 positionToCreate) {
-        DialogueLineElement lineToCreate = new DialogueLineElement(positionToCreate.x, positionToCreate.y, new DialogueLineModel(String.valueOf(counter++), message), parent);
+        DialogueLineElement lineToCreate = new DialogueLineElement(positionToCreate.x, positionToCreate.y, new DialogueLineModel(String.valueOf(counter++), message), parent, parent.getDialogue());
         return lineToCreate;
     }
 

@@ -214,25 +214,3 @@ public class ArrowLine {
 
 }
 
-        /*
-        * Vector2 arrowHead = new Vector2(to);
-        Sprite arrowHeadSprite = ResourceManager.getTriangleSprite();
-        batch.begin();
-        arrowHeadSprite.setSize(30, 40);
-        arrowHeadSprite.setOriginCenter();
-        if (isUpperConnectPoint) {
-            arrowHeadSprite.setPosition(arrowHead.x - 20, arrowHead.y - 40);
-            arrowHeadSprite.setRotation(270);
-        } else if (isLeftConnectPoint) {
-            arrowHeadSprite.setPosition(arrowHead.x - 30, arrowHead.y - 20);
-            arrowHeadSprite.setRotation(270);
-        } else if (isRightConnectPoint) {
-            arrowHeadSprite.setPosition(arrowHead.x + 40, arrowHead.y + 20);
-            arrowHeadSprite.setRotation(90);
-        } else {
-            arrowHeadSprite.setPosition(arrowHead.x + 20, arrowHead.y + 40);
-            arrowHeadSprite.setRotation(0);
-        }
-        arrowHeadSprite.draw(batch);
-        batch.end();
-        * */

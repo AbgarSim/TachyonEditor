@@ -2,7 +2,7 @@ package editor.core.elements.model;
 
 import java.util.HashMap;
 
-public class DialogueLineModel {
+public class DialogueLineModel implements Model{
 
 
     private String id;
@@ -61,5 +61,10 @@ public class DialogueLineModel {
                 events.remove(eventModel);
             }
         }
+    }
+
+    @Override
+    public void updateData() {
+
     }
 }

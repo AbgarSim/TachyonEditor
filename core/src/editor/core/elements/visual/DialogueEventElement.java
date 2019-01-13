@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import editor.core.elements.model.DialogueEventModel;
 import editor.core.resource.ResourceManager;
 
-public class DialogueEventElement {
+public class DialogueEventElement implements Element{
 
     private final Vector2 eventProportions;
     private final Vector2 eventButtonProportions = new Vector2(40, 30);
@@ -34,6 +34,8 @@ public class DialogueEventElement {
         eventTextField = new TextField("Event ", ResourceManager.getSkin());
         eventTextField.setBounds(this.parent.getPosition().x + 5, this.parent.getPosition().y - 5,
                 eventProportions.x, eventProportions.y);
+        eventTextField.addListener(new TextFieldChangeListener());
+        parent.addActorToStage(eventTextField);
 
         buttonToTargetPlayer = new CheckBox("T", ResourceManager.getSkin());
         buttonToTargetPlayer.setBounds(this.parent.getPosition().x + this.parent.getMessageFrameRectangle().width + 10, this.parent.getPosition().y - 5,
@@ -57,6 +59,9 @@ public class DialogueEventElement {
         return new Vector2(eventTextField.getWidth() + buttonToTargetPlayer.getWidth() + buttonToRemoveEvent.getWidth() + 30, eventTextField.getHeight());
     }
 
+    public DialogueEventModel getModel() {
+        return model;
+    }
 
     public void render(Batch batch) {
         eventTextField.act(Gdx.graphics.getDeltaTime());
@@ -67,13 +72,27 @@ public class DialogueEventElement {
         buttonToRemoveEvent.draw(batch, 5f);
     }
 
+    @Override
+    public void updateData() {
+        getModel().setEventTitle(eventTextField.getMessageText());
+    }
+
     class RemoveEventListener extends ClickListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             DialogueEventElement.this.parent.removeEvent(DialogueEventElement.this);
+            DialogueEventElement.this.eventTextField.remove();
             DialogueEventElement.this.buttonToTargetPlayer.remove();
             DialogueEventElement.this.buttonToRemoveEvent.remove();
             DialogueEventElement.this.parent.calculateElementsPositioning();
+            return true;
+        }
+    }
+
+    class TextFieldChangeListener extends ClickListener{
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            parent.getParentDialogue().addElementForUpdate(DialogueEventElement.this);
             return true;
         }
     }

@@ -10,6 +10,7 @@ import editor.core.elements.model.DialogueReplyModel;
 
 public class Dialogue {
 
+    private List<Element> elementsToUpdate = new ArrayList<>();
     private List<DialogueLineElement> dialogueLines;
     private List<ArrowLine> arrows;
 
@@ -32,7 +33,9 @@ public class Dialogue {
         return new ArrayList<>(dialogueLines);
     }
 
+
     private void calculateArrows() {
+        arrows.clear();
         for (DialogueLineElement line : dialogueLines) {
             if (!line.getReplies().isEmpty()) {
                 for (DialogueReplyElement replyElement : line.getReplies().values()) {
@@ -52,6 +55,30 @@ public class Dialogue {
                 return element;
         }
         return null;
+    }
+
+    public void addConnectButtons() {
+        for (DialogueLineElement element : dialogueLines)
+            element.addConnectButtonToStage();
+    }
+
+    public void removeConnectButtons() {
+        for (DialogueLineElement element : dialogueLines)
+            element.removeConnectButtonFromStage();
+    }
+
+    public void updateData() {
+        if (!elementsToUpdate.isEmpty()) {
+            for (Element element : elementsToUpdate) {
+                element.updateData();
+            }
+            elementsToUpdate.clear();
+        }
+    }
+
+    public void addElementForUpdate(Element element) {
+        if (!elementsToUpdate.contains(element))
+            elementsToUpdate.add(element);
     }
 
     public void render(ShapeRenderer renderer, SpriteBatch batch) {

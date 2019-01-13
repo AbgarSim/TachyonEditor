@@ -5,24 +5,22 @@ import java.util.List;
 
 import editor.core.elements.model.condition.Condition;
 
-public class DialogueReplyModel {
+public class DialogueReplyModel implements Model {
 
     private final DialogueLineModel parent;
     private DialogueLineModel nextLine;
 
     private String id;
-    private String nextMessage;
     private String text;
     private List<Condition> conditions = new ArrayList<>();
     private boolean anyCondition;
 
-    public DialogueReplyModel(String id, String nextMessage, String text, DialogueLineModel parent) {
-        this(id, nextMessage, text, null, parent);
+    public DialogueReplyModel(String id, String text, DialogueLineModel parent) {
+        this(id, text, null, parent);
     }
 
-    public DialogueReplyModel(String id, String nextMessage, String text, DialogueLineModel nextLine, DialogueLineModel parent) {
+    public DialogueReplyModel(String id, String text, DialogueLineModel nextLine, DialogueLineModel parent) {
         this.id = id;
-        this.nextMessage = nextMessage;
         this.text = text;
         this.nextLine = nextLine;
         this.parent = parent;
@@ -30,6 +28,23 @@ public class DialogueReplyModel {
 
     public String getId() {
         return id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public boolean isAnyCondition() {
+        return anyCondition;
+    }
+
+    public void setAnyCondition(boolean anyCondition) {
+        this.anyCondition = anyCondition;
     }
 
     public DialogueLineModel getNextLine() {
@@ -41,12 +56,15 @@ public class DialogueReplyModel {
     }
 
     public String getNextMessage() {
-        return nextMessage;
+        if (nextLine != null)
+            return nextLine.getMessageText();
+        else
+            return "-";
     }
 
-    public String getText() {
-        return text;
+
+    @Override
+    public void updateData() {
+
     }
-
-
 }

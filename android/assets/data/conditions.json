@@ -158,7 +158,7 @@
             "ship_class": "ShipClass",
             "pos_area_start": "String",
             "pos_area_end": "String",
-            "ignoreClass": "ShipClass"
+            "ignore_class": "ShipClass"
         }
     },
     {
@@ -189,7 +189,6 @@
         "isAbstract": "true",
         "extendsCondition": "PARENT_CONDITION",
         "parameters": {
-            "all_mob_ships": "boolean",
             "var_name": "String",
             "var_value": "String"
         }

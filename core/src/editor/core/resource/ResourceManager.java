@@ -14,7 +14,7 @@ public class ResourceManager {
     private static BitmapFont messageFont;
     public static Skin getSkin() {
         if (buttonSkin == null) {
-            buttonSkin = new Skin(Gdx.files.internal("clean-crispy-ui.json"));
+            buttonSkin = new Skin(Gdx.files.internal("metal-ui.json"));
         }
         return buttonSkin;
     }

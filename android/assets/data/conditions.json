@@ -3,7 +3,7 @@
         "type": "PARENT_CONDITION",
         "isAbstract": "true",
         "parameters": {
-            "targetPlayer": "boolean"
+            "target_player": "boolean"
         }
     },
     {
@@ -14,8 +14,8 @@
         "type": "MOB_AI_PRESENT",
         "extendsCondition": "MOB_CONDITION",
         "parameters": {
-            "aiTypes": "List<MobAI>",
-            "allReq": "boolean"
+            "ai_type": "List<MobAI>",
+            "all_req": "boolean"
         }
     },
     {
@@ -42,7 +42,7 @@
         "type": "MOB_NAME_PRESENT",
         "extendsCondition": "MOB_CONDITION",
         "parameters": {
-            "name": "String"
+            "mob_name": "String"
         }
     },
     {
@@ -86,8 +86,8 @@
         "type": "SECTOR_AREA_PRESENT",
         "extendsCondition": "SECTOR_CONDITION",
         "parameters": {
-            "areaStart": "String",
-            "areaEnd": "String"
+            "threat_start": "String",
+            "threat_end": "String"
         }
     },
     {
@@ -151,13 +151,13 @@
         "parameters": {
             "qty": "int",
             "location": "String",
-            "shipName": "String",
+            "ship_name": "String",
             "owner": "String",
             "crew": "String",
             "race": "Race",
-            "shipClass": "ShipClass",
-            "posAreaStart": "String",
-            "posAreaEnd": "String",
+            "ship_class": "ShipClass",
+            "pos_area_start": "String",
+            "pos_area_end": "String",
             "ignoreClass": "ShipClass"
         }
     },
@@ -169,8 +169,8 @@
         "type": "SECTOR_THREAT_PRESENT",
         "extendsCondition": "SECTOR_CONDITION",
         "parameters": {
-            "threatStart": "String",
-            "threatEnd": "String"
+            "threat_start": "String",
+            "threat_end": "String"
         }
     },
     {
@@ -181,13 +181,18 @@
         "type": "SECTOR_TYPE_PRESENT",
         "extendsCondition": "SECTOR_CONDITION",
         "parameters": {
-            "types": "List<Int>"
+            "sector_type": "List<Int>"
         }
     },
     {
         "type": "SERVER_VARIABLE_CONDITION",
         "isAbstract": "true",
         "extendsCondition": "PARENT_CONDITION",
+        "parameters": {
+            "all_mob_ships": "boolean",
+            "var_name": "String",
+            "var_value": "String"
+        }
     },
     {
         "type": "SERVER_VARIABLE_ABSENT",
@@ -196,27 +201,17 @@
     {
         "type": "SERVER_VARIABLE_BIGGER",
         "extendsCondition": "SERVER_VARIABLE_CONDITION",
-        "parameters": {
-            "varName": "String",
-            "varValue": "String"
-        }
     },
     {
         "type": "SERVER_VARIABLE_PRESENT",
         "extendsCondition": "SERVER_VARIABLE_CONDITION",
         "parameters": {
-            "varName": "String",
-            "varValue": "String",
-            "anyValue": "boolean"
+            "any_value": "boolean"
         }
     },
     {
         "type": "SERVER_VARIABLE_SMALLER",
-        "extendsCondition": "SERVER_VARIABLE_CONDITION",
-        "parameters": {
-            "varName": "String",
-            "varValue": "String"
-        }
+        "extendsCondition": "SERVER_VARIABLE_CONDITION"
     },
     {
         "type": "SHIP_AI_ABSENT",
@@ -226,8 +221,8 @@
         "type": "SHIP_AI_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "aiTypes": "List<ShipAI>",
-            "allReq": "boolean"
+            "ai_type": "List<ShipAI>",
+            "all_req": "boolean"
         }
     },
     {
@@ -238,9 +233,9 @@
         "type": "SHIP_CARGO_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "cargoType": "ItemType",
-            "systemType": "SystemType",
-            "systemModel": "String",
+            "cargo_type": "ItemType",
+            "system_type": "SystemType",
+            "system_model": "String",
             "qty": "int"
         }
     },
@@ -252,7 +247,7 @@
         "type": "SHIP_CLASS_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "shipClass": "ShipClass"
+            "ship_class": "ShipClass"
         }
     },
     {
@@ -268,9 +263,9 @@
         "isAbstract": "true",
         "extendsCondition": "PARENT_CONDITION",
         "parameters": {
-            "allMobShips": "boolean",
-            "checkTargetShip": "boolean",
-            "checkShooterShip": "boolean"
+            "all_mob_ships": "boolean",
+            "check_target_ship": "boolean",
+            "check_shooter_ship": "boolean"
         }
     },
     {
@@ -314,7 +309,7 @@
         "type": "SHIP_LEVEL_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "shipLevel": "int"
+            "qty": "int"
         }
     },
     {
@@ -336,7 +331,7 @@
         "type": "SHIP_NAME_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "shipName": "String"
+            "ship_name": "String"
         }
     },
     {
@@ -347,8 +342,8 @@
         "type": "SHIP_POSITION_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "areaStart": "String",
-            "areaEnd": "String"
+            "area_start": "String",
+            "area_end": "String"
         }
     },
     {
@@ -392,9 +387,9 @@
         "type": "SHIP_SYSTEM_PRESENT",
         "extendsCondition": "SHIP_CONDITION",
         "parameters": {
-            "systemType": "SystemType",
-            "systemModel": "String",
-            "activeSystems": "boolean",
+            "system_type": "SystemType",
+            "system_model": "String",
+            "active_system": "boolean",
             "qty": "int"
         }
     }

@@ -23,6 +23,7 @@ import java.util.List;
 
 import editor.core.control.DialogGesturesDetector;
 import editor.core.control.DialogEditorInputProcessor;
+import editor.core.elements.model.condition.ConditionsService;
 import editor.core.elements.visual.Dialogue;
 import editor.core.elements.visual.DialogueLineElement;
 import editor.core.elements.factory.DialogueLineFactory;
@@ -130,9 +131,9 @@ public class MainScreen implements Screen {
 
     @Override
     public void show() {
+        ConditionsService.loadConditions();
         worldWidth = Gdx.graphics.getWidth();
         worldHeight = Gdx.graphics.getHeight();
-
 
         movingCamera = new OrthographicCamera();
         viewport = new StretchViewport(worldWidth, worldHeight, movingCamera);

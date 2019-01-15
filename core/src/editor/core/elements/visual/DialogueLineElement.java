@@ -59,7 +59,7 @@ public class DialogueLineElement implements Element{
         this.model = model;
         this.parentDialogue = parentDialogue;
         frameRectangle = new Rectangle();
-        frameRectangle.set(posx, posy, 225, calculateFrameHeight());
+        frameRectangle.set(posx, posy, 500, calculateFrameHeight());
 
         messageFrameRectangle = new Rectangle();
         messageFrameRectangle.set(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);

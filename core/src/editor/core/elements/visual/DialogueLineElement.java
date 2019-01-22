@@ -59,10 +59,10 @@ public class DialogueLineElement implements Element{
         this.model = model;
         this.parentDialogue = parentDialogue;
         frameRectangle = new Rectangle();
-        frameRectangle.set(posx, posy, 225, calculateFrameHeight());
+        frameRectangle.set(posx, posy, 400, calculateFrameHeight());
 
         messageFrameRectangle = new Rectangle();
-        messageFrameRectangle.set(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);
+        messageFrameRectangle.set(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 60, 30);
 
         dialogLineMessageText = new TextField(model.getMessageText(), ResourceManager.getSkin());
         dialogLineMessageText.setBounds(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);
@@ -171,8 +171,8 @@ public class DialogueLineElement implements Element{
         int elementY = (int) (frameRectangle.y) + 10;
 
 
-        buttonToAddReply.setBounds(frameRectangle.x + 5, elementY, frameRectangle.width - 135, 40);
-        buttonToAddEvent.setBounds(frameRectangle.x + buttonToAddReply.getWidth() + 10, elementY, frameRectangle.width - 125, 40);
+        buttonToAddReply.setBounds(frameRectangle.x + 5, elementY, 100, 40);
+        buttonToAddEvent.setBounds(frameRectangle.x + buttonToAddReply.getWidth() + 10, elementY, 100, 40);
         elementY += buttonToAddReply.getHeight();
 
         List<DialogueEventElement> eventElements = new ArrayList<>(events.values());
@@ -191,8 +191,7 @@ public class DialogueLineElement implements Element{
             elementY += replyElements.get(i).getProportions().y;
         }
         dialogLineMessageText.setPosition(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35);
-        dragButton.setBounds(messageFrameRectangle.x + messageFrameRectangle.width + 5, frameRectangle.y + frameRectangle.height - 35,
-                40, 30);
+        dragButton.setBounds(messageFrameRectangle.x + messageFrameRectangle.width+14, frameRectangle.y + frameRectangle.height - 34,40, 30);
 
         connectNextLineButton.setPosition(frameRectangle.x + (frameRectangle.width / 2) - (connectNextLineButton.getWidth() / 2), elementY + connectNextLineButton.getHeight() + 2);
     }

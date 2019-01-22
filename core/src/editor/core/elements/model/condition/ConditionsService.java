@@ -13,8 +13,8 @@ import java.util.Set;
 
 public class ConditionsService {
 
-    public static final Set<String> selectableConditionTypes = new HashSet<>();
-    public static final Map<String, ConditionMetadata> conditionMetadatas = new HashMap<>();
+    private static final Set<String> selectableConditionTypes = new HashSet<>();
+    private static final Map<String, ConditionMetadata> conditionMetadatas = new HashMap<>();
 
     public static void loadConditions() {
         selectableConditionTypes.clear();
@@ -31,4 +31,13 @@ public class ConditionsService {
             }
         }
     }
+
+    public static ConditionMetadata getConditionMetadata(String type){
+        return conditionMetadatas.get(type);
+    }
+
+    public static Set<String> getSelectableConditionTypes(){
+        return selectableConditionTypes;
+    }
+
 }

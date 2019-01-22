@@ -1,9 +1,11 @@
 package editor.core.elements.visual.popup;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -23,7 +25,7 @@ public class EditDialogueReplyPopUp extends Dialog implements Element {
     private TextField replyTextField;
     private Label nextMessageTextField;
     private CheckBox checkBox;
-
+    private SelectBox selectBox;
 
     public EditDialogueReplyPopUp(String title, DialogueLineElement parent, DialogueReplyElement parentReply) {
         super(title, ResourceManager.getSkin());
@@ -33,6 +35,9 @@ public class EditDialogueReplyPopUp extends Dialog implements Element {
         messageTextField = new Label(parent.getModel().getMessageText(), ResourceManager.getSkin());
         replyTextField = new TextField(parentReply.getModel().getText(), ResourceManager.getSkin());
         nextMessageTextField = new Label(parentReply.getModel().getNextMessage(), ResourceManager.getSkin());
+        selectBox = new SelectBox(ResourceManager.getSkin());
+        selectBox.setItems(new TextField("Test", ResourceManager.getSkin()), new TextField("Le Test", ResourceManager.getSkin()));
+
 
         checkBox = new CheckBox("Any condition", ResourceManager.getSkin());
         checkBox.setChecked(parentReply.getModel().isAnyCondition());
@@ -51,10 +56,16 @@ public class EditDialogueReplyPopUp extends Dialog implements Element {
         table.row();
         table.add(checkBox);
         table.row();
+        table.add(selectBox);
 
         this.getContentTable().add(table);
         this.button("Done", "Done");
         this.setKeepWithinStage(false);
+
+        getBackground().setMinWidth(Gdx.graphics.getWidth() - 100);
+        getBackground().setMinHeight(Gdx.graphics.getHeight() - 100);
+
+
     }
 
 

@@ -19,7 +19,7 @@ import editor.core.resource.ResourceManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
-public class DialogueReplyElement implements Element{
+public class DialogueReplyElement implements Element {
 
     public static final String ACTION_TAG = "[ACTION]";
     public static final String SKIP_TAG = "[SKIP]";
@@ -114,8 +114,7 @@ public class DialogueReplyElement implements Element{
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             editor.core.elements.visual.popup.EditDialogueReplyPopUp dialogueReplyPopUp = new EditDialogueReplyPopUp("Edit condition", DialogueReplyElement.this.parent, DialogueReplyElement.this);
 
-            dialogueReplyPopUp.setPosition(DialogueReplyElement.this.parent.getPosition().x + DialogueReplyElement.this.parent.getProportions().x/2,
-                    DialogueReplyElement.this.parent.getPosition().y + DialogueReplyElement.this.parent.getProportions().y/2);
+            dialogueReplyPopUp.setPosition(Gdx.graphics.getWidth() / 2 - (Gdx.graphics.getWidth() - 100)/2, Gdx.graphics.getHeight() / 2 - (Gdx.graphics.getHeight() - 100)/2);
             dialogueReplyPopUp.show(parent.getParentScreen().getStage(), sequence(Actions.alpha(0), Actions.fadeIn(0.4f, Interpolation.fade)));
             return true;
         }
@@ -139,14 +138,14 @@ public class DialogueReplyElement implements Element{
             if (DialogueReplyElement.this.getModel().getNextLine() == null) {
                 DialogueReplyElement.this.parent.getParentScreen().setConnectArrowMode(true, DialogueReplyElement.this);
                 DialogueReplyElement.this.parent.getParentDialogue().addConnectButtons();
-            }else {
+            } else {
                 DialogueReplyElement.this.getModel().setNextLine(null);
             }
             return true;
         }
     }
 
-    class TextFieldChangeListener extends ClickListener{
+    class TextFieldChangeListener extends ClickListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             parent.getParentDialogue().addElementForUpdate(DialogueReplyElement.this);

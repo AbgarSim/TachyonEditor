@@ -34,7 +34,6 @@ public class DialogueEventElement implements Element{
         eventTextField = new TextField("Event ", ResourceManager.getSkin());
         eventTextField.setBounds(this.parent.getPosition().x + 5, this.parent.getPosition().y - 5,
                 eventProportions.x, eventProportions.y);
-        eventTextField.addListener(new TextFieldChangeListener());
         parent.addActorToStage(eventTextField);
 
         buttonToTargetPlayer = new CheckBox("T", ResourceManager.getSkin());
@@ -73,8 +72,8 @@ public class DialogueEventElement implements Element{
     }
 
     @Override
-    public void updateData() {
-        getModel().setEventTitle(eventTextField.getMessageText());
+    public void update() {
+
     }
 
     class RemoveEventListener extends ClickListener {
@@ -89,11 +88,4 @@ public class DialogueEventElement implements Element{
         }
     }
 
-    class TextFieldChangeListener extends ClickListener{
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            parent.getParentDialogue().addElementForUpdate(DialogueEventElement.this);
-            return true;
-        }
-    }
 }

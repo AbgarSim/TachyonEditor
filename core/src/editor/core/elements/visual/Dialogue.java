@@ -10,7 +10,6 @@ import editor.core.elements.model.DialogueReplyModel;
 
 public class Dialogue {
 
-    private List<Element> elementsToUpdate = new ArrayList<>();
     private List<DialogueLineElement> dialogueLines;
     private List<ArrowLine> arrows;
 
@@ -67,19 +66,6 @@ public class Dialogue {
             element.removeConnectButtonFromStage();
     }
 
-    public void updateData() {
-        if (!elementsToUpdate.isEmpty()) {
-            for (Element element : elementsToUpdate) {
-                element.updateData();
-            }
-            elementsToUpdate.clear();
-        }
-    }
-
-    public void addElementForUpdate(Element element) {
-        if (!elementsToUpdate.contains(element))
-            elementsToUpdate.add(element);
-    }
 
     public void render(ShapeRenderer renderer, SpriteBatch batch) {
         calculateArrows();

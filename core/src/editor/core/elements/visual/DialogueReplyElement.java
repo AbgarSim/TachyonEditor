@@ -11,15 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
-import java.util.ArrayList;
-
 import editor.core.elements.model.DialogueReplyModel;
-import editor.core.elements.visual.popup.EditDialogueReplyPopUp;
+import editor.core.screen.popup.EditDialogueReplyPopUp;
 import editor.core.resource.ResourceManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
-public class DialogueReplyElement implements Element {
+public class DialogueReplyElement implements Element{
 
     public static final String ACTION_TAG = "[ACTION]";
     public static final String SKIP_TAG = "[SKIP]";
@@ -42,7 +40,6 @@ public class DialogueReplyElement implements Element {
         replyProportions = new Vector2(parent.getProportions().x - 125, 30);
 
         messageTextField = new TextField(getModel().getText(), ResourceManager.getSkin());
-        messageTextField.addListener(new TextFieldChangeListener());
         parent.addActorToStage(messageTextField);
         //messageRectangle.set(parent.getPosition().x + 5, parent.getPosition().y - 5,
         //        replyProportions.x, replyProportions.y);
@@ -94,6 +91,7 @@ public class DialogueReplyElement implements Element {
     }
 
     public void render(Batch batch) {
+        update();
         messageTextField.act(Gdx.graphics.getDeltaTime());
         messageTextField.draw(batch, 5f);
         buttonToEditCondition.act(Gdx.graphics.getDeltaTime());
@@ -105,15 +103,17 @@ public class DialogueReplyElement implements Element {
     }
 
     @Override
-    public void updateData() {
+    public void update() {
         getModel().setText(messageTextField.getText());
     }
+
 
     class EditConditionEventListener extends ClickListener {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            editor.core.elements.visual.popup.EditDialogueReplyPopUp dialogueReplyPopUp = new EditDialogueReplyPopUp("Edit condition", DialogueReplyElement.this.parent, DialogueReplyElement.this);
 
+            editor.core.screen.popup.EditDialogueReplyPopUp dialogueReplyPopUp = new EditDialogueReplyPopUp("Edit condition", DialogueReplyElement.this.parent, DialogueReplyElement.this);
+            dialogueReplyPopUp.update();
             dialogueReplyPopUp.setPosition(Gdx.graphics.getWidth() / 2 - (Gdx.graphics.getWidth() - 100)/2, Gdx.graphics.getHeight() / 2 - (Gdx.graphics.getHeight() - 100)/2);
             dialogueReplyPopUp.show(parent.getParentScreen().getStage(), sequence(Actions.alpha(0), Actions.fadeIn(0.4f, Interpolation.fade)));
             return true;
@@ -145,13 +145,6 @@ public class DialogueReplyElement implements Element {
         }
     }
 
-    class TextFieldChangeListener extends ClickListener {
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            parent.getParentDialogue().addElementForUpdate(DialogueReplyElement.this);
-            return true;
-        }
-    }
 
 
 }

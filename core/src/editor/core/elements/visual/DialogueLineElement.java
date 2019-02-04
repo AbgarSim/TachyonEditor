@@ -66,7 +66,6 @@ public class DialogueLineElement implements Element{
 
         dialogLineMessageText = new TextField(model.getMessageText(), ResourceManager.getSkin());
         dialogLineMessageText.setBounds(frameRectangle.x + 5, frameRectangle.y + frameRectangle.height - 35, frameRectangle.width - 45, 30);
-        dialogLineMessageText.addListener(new TextFieldChangeListener());
 
 
         //replies.put(String.valueOf(counter++), new DialogueReplyElement("Qw", "123", "BlaBla", this));
@@ -227,6 +226,7 @@ public class DialogueLineElement implements Element{
     }
 
     public void render(ShapeRenderer renderer, SpriteBatch batch) {
+        update();
         renderer.setAutoShapeType(true);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.BLACK);
@@ -274,10 +274,9 @@ public class DialogueLineElement implements Element{
     }
 
     @Override
-    public void updateData() {
-        getModel().setMessageText(dialogLineMessageText.getMessageText());
+    public void update() {
+        getModel().setMessageText(dialogLineMessageText.getText());
     }
-
 
     class DragListener extends ClickListener {
 
@@ -335,14 +334,6 @@ public class DialogueLineElement implements Element{
                 return true;
             }
             return false;
-        }
-    }
-
-    class TextFieldChangeListener extends ClickListener{
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            getParentDialogue().addElementForUpdate(DialogueLineElement.this);
-            return true;
         }
     }
 

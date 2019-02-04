@@ -1,12 +1,8 @@
-package editor.core.elements.visual.popup;
+package editor.core.screen.popup;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
-import editor.core.elements.visual.Dialogue;
 import editor.core.resource.ResourceManager;
 
 public class AreYouSurePopUp extends Dialog {

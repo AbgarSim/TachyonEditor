@@ -12,6 +12,7 @@ public class ResourceManager {
 
     private static Skin buttonSkin;
     private static BitmapFont messageFont;
+    private static BitmapFont editDialogPopUpFont;
     public static Skin getSkin() {
         if (buttonSkin == null) {
             buttonSkin = new Skin(Gdx.files.internal("metal-ui.json"));
@@ -26,6 +27,15 @@ public class ResourceManager {
             messageFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         return messageFont;
+    }
+
+    public static BitmapFont getEditDialogPopUpFont() {
+        if (editDialogPopUpFont == null) {
+            editDialogPopUpFont = new BitmapFont();
+            editDialogPopUpFont.setColor(Color.BLACK);
+            editDialogPopUpFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
+        return editDialogPopUpFont;
     }
 
 }

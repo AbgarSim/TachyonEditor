@@ -28,7 +28,7 @@ import editor.core.elements.visual.Dialogue;
 import editor.core.elements.visual.DialogueLineElement;
 import editor.core.elements.factory.DialogueLineFactory;
 import editor.core.elements.visual.DialogueReplyElement;
-import editor.core.elements.visual.popup.AreYouSurePopUp;
+import editor.core.screen.popup.AreYouSurePopUp;
 import editor.core.resource.ResourceManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;

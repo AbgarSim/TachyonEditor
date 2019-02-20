@@ -2,6 +2,7 @@ package editor.core.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -174,6 +175,10 @@ public class MainScreen implements Screen {
 
     }
 
+    public void addInputMultiplexer(InputProcessor processor){
+        inputMultiplexer.addProcessor(processor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
 
     @Override
     public void render(float v) {

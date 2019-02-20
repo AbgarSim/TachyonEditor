@@ -14,25 +14,31 @@ import java.util.Set;
 public class ConditionsService {
 
     private static final Set<String> selectableConditionTypes = new HashSet<>();
-    private static final Map<String, ConditionMetadata> conditionMetadatas = new HashMap<>();
+    private static final Map<String, Condition> conditionMetadatas = new HashMap<>();
 
     public static void loadConditions() {
+
         selectableConditionTypes.clear();
         conditionMetadatas.clear();
+
+
         Json json = new Json();
-        FileHandle fh = Gdx.files.internal("data/conditions.json");
-        System.out.println("Loading conditions metadata from " + fh.file().getAbsolutePath());
-        ArrayList<JsonValue> list = json.fromJson(ArrayList.class, fh);
-        for (JsonValue v : list) {
-            ConditionMetadata cm = json.readValue(ConditionMetadata.class, v);
-            conditionMetadatas.put(cm.type.toUpperCase(), cm);
-            if (!cm.isAbstract) {
-                selectableConditionTypes.add(cm.type.toUpperCase());
+        FileHandle fileHandle = Gdx.files.internal("data/conditions.json");
+        System.out.println("Loading conditions metadata from " + fileHandle.file().getAbsolutePath());
+        ArrayList<JsonValue> list = json.fromJson(ArrayList.class, fileHandle);
+
+        for (JsonValue jsonValue : list) {
+
+            Condition condition = json.readValue(Condition.class, jsonValue);
+            conditionMetadatas.put(condition.getType().toUpperCase(), condition);
+
+            if (!condition.isAbstract) {
+                selectableConditionTypes.add(condition.getType().toUpperCase());
             }
         }
     }
 
-    public static ConditionMetadata getConditionMetadata(String type){
+    public static Condition getConditionMetadataByType(String type){
         return conditionMetadatas.get(type);
     }
 
@@ -40,4 +46,7 @@ public class ConditionsService {
         return selectableConditionTypes;
     }
 
+    public static Map<String, Condition> getConditionMetadatas(){
+        return new HashMap<String, Condition>(conditionMetadatas);
+    }
 }

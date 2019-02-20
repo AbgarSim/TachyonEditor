@@ -116,6 +116,7 @@ public class DialogueReplyElement implements Element{
             dialogueReplyPopUp.update();
             dialogueReplyPopUp.setPosition(Gdx.graphics.getWidth() / 2 - (Gdx.graphics.getWidth() - 100)/2, Gdx.graphics.getHeight() / 2 - (Gdx.graphics.getHeight() - 100)/2);
             dialogueReplyPopUp.show(parent.getParentScreen().getStage(), sequence(Actions.alpha(0), Actions.fadeIn(0.4f, Interpolation.fade)));
+            parent.getParentScreen().addInputMultiplexer(dialogueReplyPopUp.getStage());
             return true;
         }
     }

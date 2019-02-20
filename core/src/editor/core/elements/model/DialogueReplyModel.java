@@ -55,6 +55,20 @@ public class DialogueReplyModel implements Model {
         this.nextLine = nextLine;
     }
 
+    public void addCondition(Condition condition){
+        if(!conditions.contains(condition)){
+            conditions.add(condition);
+        }
+    }
+
+    public void removeCondition(Condition condition){
+        conditions.remove(condition);
+    }
+
+    public List<Condition> getConditions(){
+        return conditions;
+    }
+
     public String getNextMessage() {
         if (nextLine != null)
             return nextLine.getMessageText();
